@@ -14,9 +14,16 @@ import {
 } from 'reactstrap'
 
 import React, { useState } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUpload } from '@fortawesome/free-solid-svg-icons';
 import GeneralHeader from 'components/Headers/GeneralHeader';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types'
+import { addProduct } from 'redux/actions/productActions';
 
-const AddProduct = () => {
+
+
+const AddProduct = ({ addProduct }) => {
 
     const [formData, setFormData] = useState({
         name: '',
@@ -53,8 +60,9 @@ const AddProduct = () => {
             description,
         }
 
-        // addProducts(newProduct);
+        addProduct(newProduct);
 
+        alert('Product saved')
     }
 
     return (
@@ -201,7 +209,10 @@ const AddProduct = () => {
                                             />
                                             <Label id="upload-label" for="upload" className="font-weight-light text-muted">Upload Image</Label>
                                             <div className="input-group-append">
-                                                <Label for="upload" className="btn btn-light m-0 rounded-pill px-4"> <i className="fa fa-cloud-upload mr-2 text-muted"></i><small className="text-uppercase font-weight-bold text-muted">Choose file</small></Label>
+                                                <Label for="upload" className="btn btn-light m-0 rounded-pill px-4">
+                                                    <FontAwesomeIcon className="mr-2 text-muted" icon={faUpload} />
+                                                    <small className="text-uppercase font-weight-bold text-muted">Choose file</small>
+                                                </Label>
                                             </div>
                                         </div>
 
@@ -232,4 +243,8 @@ const AddProduct = () => {
     )
 }
 
-export default AddProduct;
+AddProduct.propTypes = {
+    addProduct: PropTypes.func.isRequired,
+}
+
+export default connect(null, { addProduct })(AddProduct);

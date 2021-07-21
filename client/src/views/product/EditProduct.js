@@ -101,7 +101,7 @@ const EditProduct = () => {
                                     </div><span>$14.99</span>
                                     <hr className="my-4" />
 
-                                    <Link to="admin/products">
+                                    <Link to="/admin/products">
                                         View all products
                                     </Link>
                                 </div>
@@ -255,10 +255,6 @@ const EditProduct = () => {
                                                     </Label>
                                                 </div>
                                             </div>
-
-                                            {/* <FontAwesomeIcon icon={faCoffee} /> */}
-
-                                            {/* <i className="fa fa-cloud-upload mr-2 text-muted"></i> */}
 
                                             <p className="font-italic text-black text-center">The image uploaded will be rendered inside the box below.</p>
                                             <div className="image-area mt-4">

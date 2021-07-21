@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import { Link } from "react-router-dom";
+
 // reactstrap components
 import {
   DropdownMenu,
@@ -34,7 +34,16 @@ import {
   Media,
 } from "reactstrap";
 
-const AdminNavbar = (props) => {
+
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from 'prop-types';
+import { logout } from "redux/actions/authActions";
+
+
+const AdminNavbar = ({ user, logout }) => {
+
+
   return (
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
@@ -43,7 +52,7 @@ const AdminNavbar = (props) => {
             className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
             to="/"
           >
-            {props.brandText}
+            Lotus Joias
           </Link>
           <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
             <FormGroup className="mb-0">
@@ -64,15 +73,12 @@ const AdminNavbar = (props) => {
                   <span className="avatar avatar-sm rounded-circle">
                     <img
                       alt="..."
-                      src={
-                        require("../../assets/img/theme/team-4-800x800.jpg")
-                          .default
-                      }
+                      src={user.avatar}
                     />
                   </span>
                   <Media className="ml-2 d-none d-lg-block">
                     <span className="mb-0 text-sm font-weight-bold">
-                      Jessica Jones
+                      {user.firstName} {user.lastName}
                     </span>
                   </Media>
                 </Media>
@@ -98,7 +104,7 @@ const AdminNavbar = (props) => {
                   <span>Support</span>
                 </DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
+                <DropdownItem href="#pablo" onClick={logout}>
                   <i className="ni ni-user-run" />
                   <span>Logout</span>
                 </DropdownItem>
@@ -111,4 +117,13 @@ const AdminNavbar = (props) => {
   );
 };
 
-export default AdminNavbar;
+AdminNavbar.propTypes = {
+  logout: PropTypes.func.isRequired,
+  user: PropTypes.object
+};
+
+const mapStateToProps = state => ({
+  user: state.authReducer.user
+});
+
+export default connect(mapStateToProps, { logout })(AdminNavbar);

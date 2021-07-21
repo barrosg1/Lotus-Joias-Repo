@@ -33,7 +33,35 @@ import {
   Media
 } from "reactstrap";
 
-const Login = () => {
+import React, { useState, useEffect } from 'react';
+import { connect } from "react-redux";
+import { Redirect, useHistory } from 'react-router-dom';
+import PropTypes from 'prop-types'
+import { login } from '../../redux/actions/authActions';
+
+
+const Login = ({ login, isAuthenticated }) => {
+
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+
+  const { email, password } = formData;
+
+  const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const onSubmit = e => {
+    e.preventDefault();
+
+    login({ email, password });
+
+  }
+
+  // redirect if logged in
+  if (isAuthenticated) {
+    return <Redirect to='/admin' />
+  }
 
   const imgStyle = {
     maxHeight: 128,
@@ -44,6 +72,7 @@ const Login = () => {
 
   return (
     <>
+
       <Col lg="5" md="7">
         <Card className="bg-secondary shadow border-0">
           <CardHeader className="bg-transparent pb-5">
@@ -54,7 +83,7 @@ const Login = () => {
 
           </CardHeader>
           <CardBody className="px-lg-5 py-lg-5">
-            <Form role="form">
+            <Form onSubmit={(e) => onSubmit(e)}>
               <FormGroup className="mb-3">
                 <InputGroup className="input-group-alternative">
                   <InputGroupAddon addonType="prepend">
@@ -66,6 +95,9 @@ const Login = () => {
                     placeholder="Email"
                     type="email"
                     autoComplete="new-email"
+                    name='email'
+                    value={email}
+                    onChange={e => onChange(e)}
                   />
                 </InputGroup>
               </FormGroup>
@@ -80,24 +112,14 @@ const Login = () => {
                     placeholder="Password"
                     type="password"
                     autoComplete="new-password"
+                    name='password'
+                    value={password}
+                    onChange={e => onChange(e)}
                   />
                 </InputGroup>
               </FormGroup>
-              <div className="custom-control custom-control-alternative custom-checkbox">
-                <input
-                  className="custom-control-input"
-                  id=" customCheckLogin"
-                  type="checkbox"
-                />
-                <label
-                  className="custom-control-label"
-                  htmlFor=" customCheckLogin"
-                >
-                  <span className="text-muted">Remember me</span>
-                </label>
-              </div>
               <div className="text-center">
-                <Button className="my-4" color="primary" type="button">
+                <Button className="my-4" color="primary" type="submit">
                   Sign in
                 </Button>
               </div>
@@ -109,4 +131,13 @@ const Login = () => {
   );
 };
 
-export default Login;
+Login.propTypes = {
+  login: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool
+}
+
+const mapStateToProps = state => ({
+  isAuthenticated: state.authReducer.isAuthenticated
+});
+
+export default connect(mapStateToProps, { login })(Login);
