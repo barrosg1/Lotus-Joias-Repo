@@ -20,6 +20,22 @@ const ProductSchema = new Schema({
         type: String,
         required: true
     },
+    quantity: {
+        type: Number,
+        required: true
+    },
+    warrantyDate: {
+        type: Date,
+        required: true
+    },
+    maxDiscount: {
+        type: Number,
+        required: true
+    },
+    purchaseDate: {
+        type: Date,
+        required: true
+    },
     image: {
         type: String,
 

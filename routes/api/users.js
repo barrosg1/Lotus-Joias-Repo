@@ -29,7 +29,7 @@ router.post('/', [
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const { firstName, lastName, email, password } = req.body;
+    const { role, firstName, lastName, email, password } = req.body;
 
     try {
         // see if user exist
@@ -47,6 +47,7 @@ router.post('/', [
         });
 
         user = new User({
+            role,
             firstName,
             lastName,
             email,

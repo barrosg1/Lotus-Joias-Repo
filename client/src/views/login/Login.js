@@ -33,11 +33,13 @@ import {
   Media
 } from "reactstrap";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from "react-redux";
-import { Redirect, useHistory } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types'
 import { login } from '../../redux/actions/authActions';
+
+import Alert from '../../layouts/Alert';
 
 
 const Login = ({ login, isAuthenticated }) => {
@@ -76,6 +78,7 @@ const Login = ({ login, isAuthenticated }) => {
       <Col lg="5" md="7">
         <Card className="bg-secondary shadow border-0">
           <CardHeader className="bg-transparent pb-5">
+            <Alert />
             <Media object style={imgStyle} src={
               require("../../assets/img/brand/Logo-02.png")
                 .default
@@ -119,7 +122,7 @@ const Login = ({ login, isAuthenticated }) => {
                 </InputGroup>
               </FormGroup>
               <div className="text-center">
-                <Button className="my-4" color="primary" type="submit">
+                <Button className="submit-btn" color="primary" type="submit">
                   Sign in
                 </Button>
               </div>

@@ -32,7 +32,8 @@ const Products = () => {
                     return (
                         <Button onClick={() => editProduct(value)} color="secondary" className>Edit</Button>
                     );
-                }
+                },
+                filter: false
             }
 
         },
@@ -47,24 +48,38 @@ const Products = () => {
                             alt="..."
                         />
                     );
-                }
+                },
+                filter: false
             }
 
         },
         {
-            name: 'Product Name'
+            name: 'Product Name',
+            options: {
+                filter: false
+            }
         },
         {
-            name: 'Wholesale Price'
+            name: 'Wholesale Price',
+            options: {
+                filter: false
+            }
         },
         {
-            name: 'Retail Price'
+            name: 'Retail Price',
+            options: {
+                filter: false
+            }
         },
         {
-            name: 'Bought From'
+            name: 'Bought From',
+
         },
         {
-            name: 'Description'
+            name: 'Description',
+            options: {
+                filter: false
+            }
         }
     ]);
 
@@ -242,8 +257,11 @@ const Products = () => {
 
 
     const options = {
-        responsive: 'standard',
+        responsive: 'vertical',
         selectableRows: false,
+        fixedHeader: true,
+        fixedSelectColumn: true,
+        tableBodyHeight: '700px',
         // onRowClick,
         rowsPerPageOptions: [5, 10, 25]
 

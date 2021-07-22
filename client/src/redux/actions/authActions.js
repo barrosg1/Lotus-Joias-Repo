@@ -11,11 +11,14 @@ import {
     LOGOUT
 } from '../types/types';
 
+import { setAlert } from './alertActions';
+
 
 // load user
 export const loadUser = () => async dispatch => {
     if (localStorage.token) {
         setAuthToken(localStorage.token);
+
     }
 
     try {
@@ -27,7 +30,10 @@ export const loadUser = () => async dispatch => {
             payload: res.data
         });
 
+        localStorage.setItem('user', JSON.stringify(res.data));
+
     } catch (err) {
+
         dispatch({
             type: AUTH_ERROR
         })
@@ -48,8 +54,6 @@ export const register = (data) => async dispatch => {
     try {
         const res = await axios.post('/api/users', body, config);
 
-        console.log(res.data);
-
         dispatch({
             type: REGISTER_SUCCESS,
             payload: res.data
@@ -59,11 +63,11 @@ export const register = (data) => async dispatch => {
 
     } catch (err) {
 
-        // const errors = err.response.data.errors;
+        const errors = err.response.data.errors;
 
-        // if (errors) {
-        //     errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
-        // }
+        if (errors) {
+            errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+        }
 
         dispatch({
             type: REGISTER_FAIL
@@ -85,8 +89,6 @@ export const login = (data) => async dispatch => {
     try {
         const res = await axios.post('/api/auth', body, config);
 
-        console.log(res.data);
-
         dispatch({
             type: LOGIN_SUCCESS,
             payload: res.data
@@ -94,13 +96,19 @@ export const login = (data) => async dispatch => {
 
         dispatch(loadUser());
 
+
     } catch (err) {
 
-        // const errors = err.response.data.errors;
+        const errors = err.response.data.errors;
 
-        // if (errors) {
-        //     errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
-        // }
+        if (errors) {
+            // errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+
+            dispatch(setAlert(errors, 'danger'));
+
+        }
+
+        console.log(`Login error: ${err}`);
 
         dispatch({
             type: LOGIN_FAIL

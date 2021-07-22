@@ -8,12 +8,13 @@ import {
 const initialState = {
     products: null,
     product: null,
-    loading: true
+    loading: true,
+    productErrors: null
 };
 
 const productReducer = (state = initialState, action) => {
 
-    const { type, payload } = action;
+    const { type, payload, productErrors } = action;
 
     switch (type) {
         case GET_PRODUCTS_SUCCESS:
@@ -32,13 +33,15 @@ const productReducer = (state = initialState, action) => {
             return {
                 ...state,
                 product: payload,
-                loading: false
+                loading: false,
+
             }
         case CREATE_PRODUCT_FAIL:
             return {
                 ...state,
                 product: null,
-                loading: false
+                loading: false,
+                productErrors
             }
 
         default:

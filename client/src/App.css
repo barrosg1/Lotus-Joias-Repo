@@ -87,6 +87,20 @@
     background: #2D4F6B !important;
   }
 
+  .alert-danger {
+
+    background: rgb(241, 167, 167);
+    border: rgb(241, 167, 167);
+  }
+
+  .alert-danger > p {
+    margin-bottom: 0;
+    font-weight: 500;
+    color: rgba(255, 0, 0, 0.658);
+
+  }
+  
+
   /* ============================ */
 
   form.user .custom-checkbox.small label {

@@ -20,10 +20,18 @@ import GeneralHeader from 'components/Headers/GeneralHeader';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types'
 import { addProduct } from 'redux/actions/productActions';
+import { setAlert } from '../../redux/actions/alertActions';
+
+
+import Alert from '../../layouts/Alert';
 
 
 
-const AddProduct = ({ addProduct }) => {
+const AddProduct = ({ addProduct, setAlert }) => {
+
+    // if (errors) {
+    //     console.log(`Product Errors: ${JSON.stringify(errors.errors)}`);
+    // }
 
     const [formData, setFormData] = useState({
         name: '',
@@ -32,11 +40,30 @@ const AddProduct = ({ addProduct }) => {
         wholesaler: '',
         image: '',
         description: '',
+        purchaseDate: '',
+        quantity: '',
+        warrantyDate: '',
+        maxDiscount: '',
     });
 
     const [fileUpload, setFileUpload] = useState({ imageFileURL: '' });
 
-    const { name, wholesalePrice, retailPrice, wholesaler, image, description } = formData;
+    const {
+        name,
+        wholesalePrice,
+        retailPrice,
+        wholesaler,
+        image,
+        description,
+        purchaseDate,
+        quantity,
+        warrantyDate,
+        maxDiscount
+
+
+    } = formData;
+
+
     const imageFileURL = fileUpload.imageFileURL;
 
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -58,17 +85,29 @@ const AddProduct = ({ addProduct }) => {
             wholesaler,
             image: imageFileURL,
             description,
+            purchaseDate,
+            quantity,
+            warrantyDate,
+            maxDiscount
         }
 
         addProduct(newProduct);
 
-        alert('Product saved')
     }
 
     return (
         <>
             <GeneralHeader />
             <Container>
+                {/* {errors && errors.errors.map((error) => {
+
+                    return (
+                        <p>{error.msg}</p>
+                    )
+                })
+                } */}
+
+                <Alert />
                 <Col xl="12">
                     <Card className="bg-secondary shadow">
                         <CardHeader className="bg-white border-0">
@@ -169,6 +208,87 @@ const AddProduct = ({ addProduct }) => {
                                     </Row>
                                 </div>
 
+                                <div className="pl-lg-4">
+                                    <Row>
+                                        <Col sm="3">
+                                            <FormGroup>
+                                                <label
+                                                    className="form-control-label"
+                                                    htmlFor="input-wholesale-price"
+                                                >
+                                                    Purchase Date
+                                                </label>
+                                                <Input
+                                                    className="form-control-alternative"
+                                                    placeholder="Purchase Date"
+                                                    type="date"
+                                                    name='purchaseDate'
+                                                    value={purchaseDate}
+                                                    onChange={e => onChange(e)}
+                                                />
+                                            </FormGroup>
+                                        </Col>
+
+                                        <Col sm="2">
+                                            <FormGroup>
+                                                <label
+                                                    className="form-control-label"
+                                                    htmlFor="input-retail-price"
+                                                >
+                                                    Quantity
+                                                </label>
+                                                <Input
+                                                    className="form-control-alternative"
+                                                    placeholder="Quantity"
+                                                    type="text"
+                                                    name='quantity'
+                                                    value={quantity}
+                                                    onChange={e => onChange(e)}
+                                                />
+                                            </FormGroup>
+                                        </Col>
+
+                                        <Col sm="3">
+                                            <FormGroup>
+                                                <label
+                                                    className="form-control-label"
+                                                    htmlFor="input-retail-price"
+                                                >
+                                                    Warranty Date
+                                                </label>
+                                                <Input
+                                                    className="form-control-alternative"
+                                                    placeholder="Warranty Date"
+                                                    type="date"
+                                                    name='warrantyDate'
+                                                    value={warrantyDate}
+                                                    onChange={e => onChange(e)}
+                                                />
+                                            </FormGroup>
+                                        </Col>
+
+                                        <Col sm="4">
+                                            <FormGroup>
+                                                <label
+                                                    className="form-control-label"
+                                                    htmlFor="input-retail-price"
+                                                >
+                                                    Maximum Discount
+                                                </label>
+                                                <Input
+                                                    className="form-control-alternative"
+                                                    placeholder="Maximum Discount"
+                                                    type="text"
+                                                    name='maxDiscount'
+                                                    value={maxDiscount}
+                                                    onChange={e => onChange(e)}
+                                                />
+                                            </FormGroup>
+                                        </Col>
+
+                                    </Row>
+                                </div>
+
                                 <Row>
                                     <Col ls="12">
                                         <div className="pl-lg-4">
@@ -245,6 +365,13 @@ const AddProduct = ({ addProduct }) => {
 
 AddProduct.propTypes = {
     addProduct: PropTypes.func.isRequired,
+    setAlert: PropTypes.func.isRequired,
+
 }
 
-export default connect(null, { addProduct })(AddProduct);
+const mapStateToProps = state => ({
+
+    errors: state.productReducer.productErrors
+});
+
+export default connect(mapStateToProps, { addProduct, setAlert })(AddProduct);

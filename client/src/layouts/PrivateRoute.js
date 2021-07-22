@@ -8,6 +8,7 @@ import routes from '../routes';
 import Sidebar from '../components/Sidebar/Sidebar';
 import AdminNavbar from '../components/Navbars/AdminNavbar';
 import AdminFooter from '../components/Footers/AdminFooter';
+import Alert from '../layouts/Alert';
 
 const PrivateRoute = ({
     component: Component,
@@ -32,6 +33,7 @@ const PrivateRoute = ({
                         />
                         <div className="main-content" >
                             <AdminNavbar />
+
                             <Component {...props} />
                             <Container fluid>
                                 <AdminFooter />

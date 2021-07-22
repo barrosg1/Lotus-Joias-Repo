@@ -267,7 +267,7 @@ const EditProduct = () => {
                                                             className="img-fluid rounded shadow-sm mx-auto d-block"
                                                         /> :
 
-                                                        <p>Uploaded image will be displayed here</p>
+                                                        <p>Uploaded image result</p>
                                                 }
                                             </div>
                                         </Col>

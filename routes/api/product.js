@@ -11,10 +11,15 @@ const Product = require('../../models/Product');
 
 router.post('/', [
     auth,
-    check('name').not().isEmpty(),
-    check('wholesalePrice').not().isEmpty(),
-    check('retailPrice').not().isEmpty(),
-    check('wholesaler').not().isEmpty(),
+    check('name', 'Product name is required').not().isEmpty(),
+    check('wholesalePrice', 'Wholesale price is required').not().isEmpty(),
+    check('retailPrice', 'Retail price is required').not().isEmpty(),
+    check('wholesaler', 'Wholesaler is required').not().isEmpty(),
+    check('image', 'Image for this product is required').not().isEmpty(),
+    check('purchaseDate', 'Purchase data is required').not().isEmpty(),
+    check('quantity', 'Quantity is required').not().isEmpty(),
+    check('warrantyDate', 'Warranty date is required').not().isEmpty(),
+    check('maxDiscount', 'Maximum discount is required').not().isEmpty(),
 
 ], async (req, res) => {
 
@@ -24,7 +29,18 @@ router.post('/', [
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, wholesalePrice, retailPrice, wholesaler, description, image } = req.body;
+    const {
+        name,
+        wholesalePrice,
+        retailPrice,
+        wholesaler,
+        description,
+        image,
+        purchaseDate,
+        quantity,
+        warrantyDate,
+        maxDiscount
+    } = req.body;
 
     let productFields = {};
 
@@ -34,6 +50,10 @@ router.post('/', [
     if (wholesaler) productFields.wholesaler = wholesaler;
     if (description) productFields.description = description;
     if (image) productFields.image = image;
+    if (purchaseDate) productFields.purchaseDate = purchaseDate;
+    if (quantity) productFields.quantity = quantity;
+    if (warrantyDate) productFields.warrantyDate = warrantyDate;
+    if (maxDiscount) productFields.maxDiscount = maxDiscount;
 
     try {
 

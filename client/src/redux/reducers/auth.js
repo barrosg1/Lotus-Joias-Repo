@@ -6,7 +6,7 @@ import {
     LOGIN_SUCCESS,
     LOGIN_FAIL,
     LOGOUT
-} from '../types/types'
+} from '../types/types.js'
 
 const initialState = {
     token: localStorage.getItem('token'),
@@ -15,7 +15,7 @@ const initialState = {
     user: null
 };
 
-const authReducer = (state = initialState, action) => {
+const auth = (state = initialState, action) => {
 
     const { type, payload } = action;
 
@@ -49,6 +49,7 @@ const authReducer = (state = initialState, action) => {
         case AUTH_ERROR:
         case LOGOUT:
             localStorage.removeItem('token');
+            localStorage.removeItem('user');
             return {
                 ...state,
                 token: null,
@@ -62,4 +63,4 @@ const authReducer = (state = initialState, action) => {
 
 }
 
-export default authReducer;
+export default auth;
