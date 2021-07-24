@@ -1,48 +1,45 @@
-import React, { Fragment, useRef, useEffect } from "react";
-import { Route, Redirect, useLocation } from "react-router-dom";
+import React, { Fragment } from "react";
+import { Route, Redirect } from "react-router-dom";
 import { Container } from "reactstrap";
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import routes from '../routes';
 import Sidebar from '../components/Sidebar/Sidebar';
 import AdminNavbar from '../components/Navbars/AdminNavbar';
 import AdminFooter from '../components/Footers/AdminFooter';
-import Alert from '../layouts/Alert';
 
 const PrivateRoute = ({
     component: Component,
-    auth: { isAuthenticated, loading },
+    auth: { isAuthenticated, loading, user },
     ...rest
 }) => {
 
     return (
         <Route
             {...rest}
-            render={props =>
-                !isAuthenticated && !loading ? (<Redirect to="/auth/login" />) : (
-                    <>
-                        <Sidebar
-                            {...props}
-                            routes={routes}
-                            logo={{
-                                innerLink: "/admin",
-                                imgSrc: require("../assets/img/brand/Logo-02.png").default,
-                                imgAlt: "...",
-                            }}
-                        />
-                        <div className="main-content" >
-                            <AdminNavbar />
+            render={props => !isAuthenticated && !loading ? (<Redirect to="/auth/login" />) : (
 
-                            <Component {...props} />
-                            <Container fluid>
-                                <AdminFooter />
-                            </Container>
-                        </div>
+                <Fragment>
+                    {
+                        !user ? (<p>Loading...</p>)
 
-                    </>
+                            :
 
-                )}
+                            <Fragment>
+                                <Sidebar />
+                                <div className="main-content" >
+                                    <AdminNavbar />
+                                    <Component {...props} />
+                                    <Container fluid>
+                                        <AdminFooter />
+                                    </Container>
+                                </div>
+                            </Fragment>
+                    }
+
+                </Fragment>
+
+            )}
         />
     );
 }

@@ -43,11 +43,8 @@ export const loadUser = () => async dispatch => {
 // register User
 export const register = (data) => async dispatch => {
 
-    const config = {
-        headers: {
-            'Content-Type': 'Application/json'
-        }
-    }
+    const config = { headers: { 'Content-Type': `multipart/form-data; boundary=${data._boundary}`, } }
+
 
     const body = JSON.stringify(data);
 

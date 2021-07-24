@@ -99,6 +99,16 @@
     color: rgba(255, 0, 0, 0.658);
 
   }
+
+  .alert-success > p {
+    font-weight: 500;
+    color: green;
+
+  }
+
+  .alert-btn {
+
+  }
   
 
   /* ============================ */

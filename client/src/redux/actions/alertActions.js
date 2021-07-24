@@ -1,9 +1,7 @@
 import { SET_ALERT, REMOVE_ALERT } from "../types/types";
 
-import { v4 as uuidv4 } from 'uuid';
 
-
-export const setAlert = (msgData, alertType, redirectValue = null, redirectPath = null, timeout = 5000) => dispatch => {
+export const setAlert = (msgData, alertType, redirectValue = null, redirectPath = null) => dispatch => {
 
     dispatch({
         type: SET_ALERT,
@@ -15,5 +13,11 @@ export const setAlert = (msgData, alertType, redirectValue = null, redirectPath 
         }
     })
 
-    setTimeout(() => dispatch({ type: REMOVE_ALERT }), timeout);
+    // setTimeout(() => dispatch({ type: REMOVE_ALERT }), timeout);
+};
+
+export const removeAlert = () => dispatch => {
+
+    dispatch({ type: REMOVE_ALERT })
+
 };

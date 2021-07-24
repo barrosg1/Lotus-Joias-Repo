@@ -1,10 +1,3 @@
-import MUIDataTable from "mui-datatables";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import React, { useState } from 'react';
-import { Redirect, useHistory } from "react-router-dom";
-
-// reactstrap components
 import {
 
     Button,
@@ -12,17 +5,34 @@ import {
 
 } from "reactstrap";
 
+import MUIDataTable from "mui-datatables";
+import TableRow from "@material-ui/core/TableRow";
+import TableCell from "@material-ui/core/TableCell";
+import React, { useState, useEffect } from 'react';
+import { Redirect, useHistory } from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from 'prop-types'
+
 import GeneralHeader from '../../components/Headers/GeneralHeader';
 
-const Products = () => {
+import { getProducts } from '../../redux/actions/productActions';
+import { useSelector } from "react-redux";
 
-    let history = useHistory();
 
-    const editProduct = (id) => {
+const Products = ({ getProducts, productInfo: { products, loading } }) => {
 
-        alert(id);
-    }
+    // let products = useSelector(state => state.productReducer.products);
 
+    // const [data, setData] = useState([]);
+
+    useEffect(() => {
+
+        getProducts();
+
+    }, [getProducts]);
+
+
+    const editProduct = (id) => { alert(id); }
 
     const [columns, setColumns] = useState([
         {
@@ -41,10 +51,11 @@ const Products = () => {
             name: 'Product Image',
             options: {
                 customBodyRender: (value, tableMeta, updateValue) => {
+
                     return (
                         <Media
                             className="product-image-table"
-                            src={value}
+                            src={`/images/${value}`}
                             alt="..."
                         />
                     );
@@ -83,177 +94,30 @@ const Products = () => {
         }
     ]);
 
-    const [data, setData] = useState([
+    const constructedData = () => {
+        const productList = [];
 
-        {
-            "View Product": "abc123",
-            "Product Image": "https://image.shutterstock.com/image-illustration/3d-render-golden-rings-isolated-260nw-172133633.jpg",
-            "Product Name": "Berloque",
-            "Wholesale Price": "2.99",
-            "Bought From": "Marisa US",
-            "Retail Price": "10.99",
-            "Description": "Nice!"
-        },
-        {
-            "View Product": "abc123",
-            "Product Image": "https://www.brides.com/thmb/4PCnLR-h1HZuGHEP0AFkF0o8EiM=/1190x1190/smart/filters:no_upscale()/sq-b609e1c6078c460abc25857ae151bf2e.jpg",
-            "Product Name": "Berloque",
-            "Wholesale Price": "2.99",
-            "Bought From": "Marisa US",
-            "Retail Price": "10.99",
-            "Description": "Nice!"
-        },
-        {
-            "View Product": "abc123",
-            "Product Image": "https://media.tiffany.com/is/image/Tiffany/EcomItemL2/tiffany-hardwearlink-bracelet-38086839_993599_ED_M.jpg",
-            "Product Name": "Berloque",
-            "Wholesale Price": "2.99",
-            "Bought From": "Marisa US",
-            "Retail Price": "10.99",
-            "Description": "Nice!"
-        },
-        {
-            "View Product": "abc123",
-            "Product Image": "https://image.shutterstock.com/image-illustration/3d-render-golden-rings-isolated-260nw-172133633.jpg",
-            "Product Name": "Berloque",
-            "Wholesale Price": "2.99",
-            "Bought From": "Marisa US",
-            "Retail Price": "10.99",
-            "Description": "Nice!"
-        },
-        {
-            "View Product": "abc123",
-            "Product Image": "https://www.brides.com/thmb/4PCnLR-h1HZuGHEP0AFkF0o8EiM=/1190x1190/smart/filters:no_upscale()/sq-b609e1c6078c460abc25857ae151bf2e.jpg",
-            "Product Name": "Berloque",
-            "Wholesale Price": "2.99",
-            "Bought From": "Marisa US",
-            "Retail Price": "10.99",
-            "Description": "Nice!"
-        },
-        {
-            "View Product": "abc123",
-            "Product Image": "https://media.tiffany.com/is/image/Tiffany/EcomItemL2/tiffany-hardwearlink-bracelet-38086839_993599_ED_M.jpg",
-            "Product Name": "Berloque",
-            "Wholesale Price": "2.99",
-            "Bought From": "Marisa US",
-            "Retail Price": "10.99",
-            "Description": "Nice!"
-        },
-        {
-            "View Product": "abc123",
-            "Product Image": "https://image.shutterstock.com/image-illustration/3d-render-golden-rings-isolated-260nw-172133633.jpg",
-            "Product Name": "Berloque",
-            "Wholesale Price": "2.99",
-            "Bought From": "Marisa US",
-            "Retail Price": "10.99",
-            "Description": "Nice!"
-        },
-        {
-            "View Product": "abc123",
-            "Product Image": "https://www.brides.com/thmb/4PCnLR-h1HZuGHEP0AFkF0o8EiM=/1190x1190/smart/filters:no_upscale()/sq-b609e1c6078c460abc25857ae151bf2e.jpg",
-            "Product Name": "Berloque",
-            "Wholesale Price": "2.99",
-            "Bought From": "Marisa US",
-            "Retail Price": "10.99",
-            "Description": "Nice!"
-        },
-        {
-            "View Product": "abc123",
-            "Product Image": "https://media.tiffany.com/is/image/Tiffany/EcomItemL2/tiffany-hardwearlink-bracelet-38086839_993599_ED_M.jpg",
-            "Product Name": "Berloque",
-            "Wholesale Price": "2.99",
-            "Bought From": "Marisa US",
-            "Retail Price": "10.99",
-            "Description": "Nice!"
-        },
-        {
-            "View Product": "abc123",
-            "Product Image": "https://image.shutterstock.com/image-illustration/3d-render-golden-rings-isolated-260nw-172133633.jpg",
-            "Product Name": "Berloque",
-            "Wholesale Price": "2.99",
-            "Bought From": "Marisa US",
-            "Retail Price": "10.99",
-            "Description": "Nice!"
-        },
-        {
-            "View Product": "abc123",
-            "Product Image": "https://www.brides.com/thmb/4PCnLR-h1HZuGHEP0AFkF0o8EiM=/1190x1190/smart/filters:no_upscale()/sq-b609e1c6078c460abc25857ae151bf2e.jpg",
-            "Product Name": "Berloque",
-            "Wholesale Price": "2.99",
-            "Bought From": "Marisa US",
-            "Retail Price": "10.99",
-            "Description": "Nice!"
-        },
-        {
-            "View Product": "abc123",
-            "Product Image": "https://media.tiffany.com/is/image/Tiffany/EcomItemL2/tiffany-hardwearlink-bracelet-38086839_993599_ED_M.jpg",
-            "Product Name": "Berloque",
-            "Wholesale Price": "2.99",
-            "Bought From": "Marisa US",
-            "Retail Price": "10.99",
-            "Description": "Nice!"
-        },
-        {
-            "View Product": "abc123",
-            "Product Image": "https://image.shutterstock.com/image-illustration/3d-render-golden-rings-isolated-260nw-172133633.jpg",
-            "Product Name": "Berloque",
-            "Wholesale Price": "2.99",
-            "Bought From": "Marisa US",
-            "Retail Price": "10.99",
-            "Description": "Nice!"
-        },
-        {
-            "View Product": "abc123",
-            "Product Image": "https://www.brides.com/thmb/4PCnLR-h1HZuGHEP0AFkF0o8EiM=/1190x1190/smart/filters:no_upscale()/sq-b609e1c6078c460abc25857ae151bf2e.jpg",
-            "Product Name": "Berloque",
-            "Wholesale Price": "2.99",
-            "Bought From": "Marisa US",
-            "Retail Price": "10.99",
-            "Description": "Nice!"
-        },
-        {
-            "View Product": "abc123",
-            "Product Image": "https://media.tiffany.com/is/image/Tiffany/EcomItemL2/tiffany-hardwearlink-bracelet-38086839_993599_ED_M.jpg",
-            "Product Name": "Berloque",
-            "Wholesale Price": "2.99",
-            "Bought From": "Marisa US",
-            "Retail Price": "10.99",
-            "Description": "Nice!"
-        },
-        {
-            "View Product": "abc123",
-            "Product Image": "https://image.shutterstock.com/image-illustration/3d-render-golden-rings-isolated-260nw-172133633.jpg",
-            "Product Name": "Berloque",
-            "Wholesale Price": "2.99",
-            "Bought From": "Marisa US",
-            "Retail Price": "10.99",
-            "Description": "Nice!"
-        },
-        {
-            "View Product": "abc123",
-            "Product Image": "https://www.brides.com/thmb/4PCnLR-h1HZuGHEP0AFkF0o8EiM=/1190x1190/smart/filters:no_upscale()/sq-b609e1c6078c460abc25857ae151bf2e.jpg",
-            "Product Name": "Berloque",
-            "Wholesale Price": "2.99",
-            "Bought From": "Marisa US",
-            "Retail Price": "10.99",
-            "Description": "Nice!"
-        },
-        {
-            "View Product": "abc123",
-            "Product Image": "https://media.tiffany.com/is/image/Tiffany/EcomItemL2/tiffany-hardwearlink-bracelet-38086839_993599_ED_M.jpg",
-            "Product Name": "Berloque",
-            "Wholesale Price": "2.99",
-            "Bought From": "Marisa US",
-            "Retail Price": "10.99",
-            "Description": "Nice!"
-        },
+        !loading && products && products.forEach(product => {
 
-    ]);
+            productList.push({
+                "View Product": product._id,
+                "Product Image": product.image,
+                "Product Name": product.name,
+                "Wholesale Price": product.wholesalePrice,
+                "Bought From": product.wholesaler,
+                "Retail Price": product.retailPrice,
+                "Description": product.description
+            });
+        });
 
-    // const onRowClick = () => {
+        return productList;
+    }
 
-    //     history.push("/admin");
-    // }
+
+    // // const onRowClick = () => {
+
+    // //     history.push("/admin");
+    // // }
 
 
     const options = {
@@ -267,18 +131,21 @@ const Products = () => {
 
     };
 
-
     return (
         <>
 
             <GeneralHeader />
+
             <Container>
+
                 <MUIDataTable
                     title={"Products"}
-                    data={data}
+                    data={constructedData()}
                     columns={columns}
                     options={options}
                 />
+
+
             </Container>
 
         </>
@@ -286,7 +153,18 @@ const Products = () => {
 
 }
 
-export default Products;
+Products.propTypes = {
+    getProducts: PropTypes.func.isRequired,
+}
+
+const mapStateToProps = state => ({
+
+    productInfo: state.productReducer
+
+});
+
+
+export default connect(mapStateToProps, { getProducts })(Products);
 
 
 

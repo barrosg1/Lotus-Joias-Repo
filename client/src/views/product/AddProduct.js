@@ -20,33 +20,29 @@ import GeneralHeader from 'components/Headers/GeneralHeader';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types'
 import { addProduct } from 'redux/actions/productActions';
-import { setAlert } from '../../redux/actions/alertActions';
-
-
 import Alert from '../../layouts/Alert';
 
+//mport axios from "axios";
 
 
-const AddProduct = ({ addProduct, setAlert }) => {
-
-    // if (errors) {
-    //     console.log(`Product Errors: ${JSON.stringify(errors.errors)}`);
-    // }
+const AddProduct = ({ addProduct }) => {
 
     const [formData, setFormData] = useState({
-        name: '',
-        wholesalePrice: '',
-        retailPrice: '',
-        wholesaler: '',
-        image: '',
-        description: '',
+        name: 'Some Product',
+        wholesalePrice: '2.99',
+        retailPrice: '19.00',
+        wholesaler: 'rarissima',
+        image: null,
+        description: 'hello bitch',
         purchaseDate: '',
-        quantity: '',
+        quantity: '100',
         warrantyDate: '',
-        maxDiscount: '',
+        maxDiscount: '10',
     });
 
+    const [selectedFile, setSelectedFile] = useState();
     const [fileUpload, setFileUpload] = useState({ imageFileURL: '' });
+    const [fileUploadName, setFileUploadName] = useState('Upload Image');
 
     const {
         name,
@@ -70,28 +66,32 @@ const AddProduct = ({ addProduct, setAlert }) => {
 
     const handleImageChange = e => {
 
+        setFileUploadName(e.target.files[0].name);
         setFileUpload({ imageFileURL: URL.createObjectURL(e.target.files[0]) });
         setFormData({ ...formData, image: e.target.value });
+        setSelectedFile(e.target.files[0]);
+
+        console.log(`FILE Contents: ${JSON.stringify(e.target.files[0])}`)
 
     }
 
     const onSubmit = async e => {
         e.preventDefault();
 
-        const newProduct = {
-            name,
-            wholesalePrice,
-            retailPrice,
-            wholesaler,
-            image: imageFileURL,
-            description,
-            purchaseDate,
-            quantity,
-            warrantyDate,
-            maxDiscount
-        }
+        let bodyFormData = new FormData();
 
-        addProduct(newProduct);
+        bodyFormData.append('name', name);
+        bodyFormData.append('wholesalePrice', wholesalePrice);
+        bodyFormData.append('retailPrice', retailPrice);
+        bodyFormData.append('wholesaler', wholesaler);
+        bodyFormData.append('description', description);
+        bodyFormData.append('purchaseDate', purchaseDate);
+        bodyFormData.append('quantity', quantity);
+        bodyFormData.append('warrantyDate', warrantyDate);
+        bodyFormData.append('maxDiscount', maxDiscount);
+        bodyFormData.append('image', selectedFile);
+
+        addProduct(bodyFormData);
 
     }
 
@@ -99,17 +99,9 @@ const AddProduct = ({ addProduct, setAlert }) => {
         <>
             <GeneralHeader />
             <Container>
-                {/* {errors && errors.errors.map((error) => {
-
-                    return (
-                        <p>{error.msg}</p>
-                    )
-                })
-                } */}
-
-                <Alert />
                 <Col xl="12">
                     <Card className="bg-secondary shadow">
+                        <Alert />
                         <CardHeader className="bg-white border-0">
                             <Row className="align-items-center">
                                 <Col xs="8">
@@ -327,7 +319,7 @@ const AddProduct = ({ addProduct, setAlert }) => {
                                                 value={image}
                                                 accept="image/*"
                                             />
-                                            <Label id="upload-label" for="upload" className="font-weight-light text-muted">Upload Image</Label>
+                                            <Label id="upload-label" for="upload" className="font-weight-light text-muted">{fileUploadName}</Label>
                                             <div className="input-group-append">
                                                 <Label for="upload" className="btn btn-light m-0 rounded-pill px-4">
                                                     <FontAwesomeIcon className="mr-2 text-muted" icon={faUpload} />
@@ -365,13 +357,7 @@ const AddProduct = ({ addProduct, setAlert }) => {
 
 AddProduct.propTypes = {
     addProduct: PropTypes.func.isRequired,
-    setAlert: PropTypes.func.isRequired,
 
 }
 
-const mapStateToProps = state => ({
-
-    errors: state.productReducer.productErrors
-});
-
-export default connect(mapStateToProps, { addProduct, setAlert })(AddProduct);
+export default connect(null, { addProduct })(AddProduct);

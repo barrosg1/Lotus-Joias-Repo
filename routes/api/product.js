@@ -1,9 +1,12 @@
 const express = require('express');
+const multer = require('multer');
 const router = express.Router();
 const auth = require('../../middleware/auth');
 const { check, validationResult } = require('express-validator');
 
 const Product = require('../../models/Product');
+const upload = require('../../utils/fileUploadMiddleware');
+
 
 // @route   POST api/profile
 // @desc    Create or update product
@@ -11,11 +14,11 @@ const Product = require('../../models/Product');
 
 router.post('/', [
     auth,
+    upload.single('image'),
     check('name', 'Product name is required').not().isEmpty(),
     check('wholesalePrice', 'Wholesale price is required').not().isEmpty(),
     check('retailPrice', 'Retail price is required').not().isEmpty(),
     check('wholesaler', 'Wholesaler is required').not().isEmpty(),
-    check('image', 'Image for this product is required').not().isEmpty(),
     check('purchaseDate', 'Purchase data is required').not().isEmpty(),
     check('quantity', 'Quantity is required').not().isEmpty(),
     check('warrantyDate', 'Warranty date is required').not().isEmpty(),
@@ -35,12 +38,13 @@ router.post('/', [
         retailPrice,
         wholesaler,
         description,
-        image,
         purchaseDate,
         quantity,
         warrantyDate,
         maxDiscount
     } = req.body;
+
+    const image = req.file.filename;
 
     let productFields = {};
 
@@ -170,5 +174,17 @@ router.delete('/:product_id', auth, async (req, res) => {
     }
 });
 
+router.delete('/', auth, async (req, res) => {
+    try {
+
+        await Product.remove();
+
+        res.send('All products deleted');
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
 
 module.exports = router;

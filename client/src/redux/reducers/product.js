@@ -6,42 +6,44 @@ import {
 } from '../types/types'
 
 const initialState = {
-    products: null,
+    products: [],
     product: null,
     loading: true,
-    productErrors: null
+    errors: null
+
 };
 
 const productReducer = (state = initialState, action) => {
 
-    const { type, payload, productErrors } = action;
+    const { type, payload, errors } = action;
 
     switch (type) {
         case GET_PRODUCTS_SUCCESS:
             return {
                 ...state,
                 products: payload,
-                loading: false
+                loading: false,
+
             }
         case GET_PRODUCTS_FAIL:
             return {
                 ...state,
                 products: null,
-                loading: false
+                loading: false,
+                errors
             }
         case CREATE_PRODUCT_SUCCESS:
             return {
                 ...state,
                 product: payload,
                 loading: false,
-
             }
         case CREATE_PRODUCT_FAIL:
             return {
                 ...state,
                 product: null,
                 loading: false,
-                productErrors
+                errors
             }
 
         default:

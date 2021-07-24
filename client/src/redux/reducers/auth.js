@@ -50,6 +50,7 @@ const auth = (state = initialState, action) => {
         case LOGOUT:
             localStorage.removeItem('token');
             localStorage.removeItem('user');
+            localStorage.removeItem('products');
             return {
                 ...state,
                 token: null,

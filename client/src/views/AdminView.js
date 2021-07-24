@@ -48,7 +48,7 @@ import {
 
 import Header from "components/Headers/Header.js";
 
-const Index = (props) => {
+const Index = () => {
   const [activeNav, setActiveNav] = useState(1);
   const [chartExample1Data, setChartExample1Data] = useState("data1");
 

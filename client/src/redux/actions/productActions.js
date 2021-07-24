@@ -14,6 +14,7 @@ export const getProducts = () => async dispatch => {
 
     try {
 
+
         const res = await axios.get('/api/product');
 
         dispatch({
@@ -21,7 +22,17 @@ export const getProducts = () => async dispatch => {
             payload: res.data
         });
 
+
     } catch (err) {
+
+        const errors = err.response.data.errors;
+
+        if (errors) {
+
+            console.log(`GET_PRODUCTS_FAIL: ${errors}`);
+
+        }
+
         dispatch({
             type: GET_PRODUCTS_FAIL
         })
@@ -30,34 +41,37 @@ export const getProducts = () => async dispatch => {
 
 export const addProduct = (data) => async dispatch => {
 
-    const config = {
-        headers: {
-            'Content-Type': 'Application/json'
-        }
-    }
-
-    const body = JSON.stringify(data);
+    const config = { headers: { "Content-Type": "multipart/form-data" } }
 
     try {
 
-        const res = await axios.post('/api/product', body, config);
+        const res = await axios.post('/api/product', data, config);
 
         dispatch({
             type: CREATE_PRODUCT_SUCCESS,
             payload: res.data
         });
 
+        dispatch(setAlert([{ msg: 'Product saved' }], 'success', 'View all products', '/admin/products'));
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
     } catch (err) {
 
         const errors = err.response.data.errors;
 
         if (errors) {
-            errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+
+            dispatch(setAlert(errors, 'danger'));
+
         }
 
         dispatch({
             type: CREATE_PRODUCT_FAIL,
-            productErrors: err.response.data
-        })
+            errors: err.response.data
+        });
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
     }
 };

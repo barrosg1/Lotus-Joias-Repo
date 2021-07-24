@@ -27,6 +27,7 @@ import AddClient from './views/client/AddClient';
 // === Other Imports ===
 import { Provider } from 'react-redux';
 import { loadUser } from './redux/actions/authActions';
+import { getProducts } from "redux/actions/productActions";
 
 
 
@@ -35,6 +36,7 @@ function App() {
     useEffect(() => {
 
         store.dispatch(loadUser());
+        store.dispatch(getProducts);
 
     }, []);
 
