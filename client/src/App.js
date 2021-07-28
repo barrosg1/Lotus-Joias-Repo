@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 
+
 import "assets/plugins/nucleo/css/nucleo.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "assets/scss/argon-dashboard-react.scss";
@@ -27,7 +28,6 @@ import AddClient from './views/client/AddClient';
 // === Other Imports ===
 import { Provider } from 'react-redux';
 import { loadUser } from './redux/actions/authActions';
-import { getProducts } from "redux/actions/productActions";
 
 
 
@@ -36,7 +36,7 @@ function App() {
     useEffect(() => {
 
         store.dispatch(loadUser());
-        store.dispatch(getProducts);
+
 
     }, []);
 
@@ -53,7 +53,7 @@ function App() {
                     <PrivateRoute exact path={`${ADMIN}/products`} component={Products} />
                     <PrivateRoute exact path={`${ADMIN}/add-product`} component={AddProduct} />
                     <PrivateRoute exact path={`${ADMIN}/add-client`} component={AddClient} />
-                    <PrivateRoute exact path={`${ADMIN}/edit-product`} component={EditProduct} />
+                    <PrivateRoute exact path={`${ADMIN}/edit-product/:product_id`} component={EditProduct} />
                     <PrivateRoute exact path={ADMIN} component={AdminView} />
                     {/* 
                     <Route exact path={`${AUTH}/login`} component={AuthLayout} />

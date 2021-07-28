@@ -8,7 +8,7 @@ const Product = require('../../models/Product');
 const upload = require('../../utils/fileUploadMiddleware');
 
 
-// @route   POST api/profile
+// @route   POST api/product
 // @desc    Create or update product
 // @access  Private
 
@@ -19,49 +19,50 @@ router.post('/', [
     check('wholesalePrice', 'Wholesale price is required').not().isEmpty(),
     check('retailPrice', 'Retail price is required').not().isEmpty(),
     check('wholesaler', 'Wholesaler is required').not().isEmpty(),
-    check('purchaseDate', 'Purchase data is required').not().isEmpty(),
+    check('purchaseDate', 'Purchase date is required').not().isEmpty(),
     check('quantity', 'Quantity is required').not().isEmpty(),
     check('warrantyDate', 'Warranty date is required').not().isEmpty(),
     check('maxDiscount', 'Maximum discount is required').not().isEmpty(),
+    check('image', 'Image is required').not().isEmpty(),
 
 ], async (req, res) => {
 
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-
-    const {
-        name,
-        wholesalePrice,
-        retailPrice,
-        wholesaler,
-        description,
-        purchaseDate,
-        quantity,
-        warrantyDate,
-        maxDiscount
-    } = req.body;
-
-    const image = req.file.filename;
-
-    let productFields = {};
-
-    if (name) productFields.name = name;
-    if (wholesalePrice) productFields.wholesalePrice = wholesalePrice;
-    if (retailPrice) productFields.retailPrice = retailPrice;
-    if (wholesaler) productFields.wholesaler = wholesaler;
-    if (description) productFields.description = description;
-    if (image) productFields.image = image;
-    if (purchaseDate) productFields.purchaseDate = purchaseDate;
-    if (quantity) productFields.quantity = quantity;
-    if (warrantyDate) productFields.warrantyDate = warrantyDate;
-    if (maxDiscount) productFields.maxDiscount = maxDiscount;
-
     try {
 
-        const product = new Product(productFields);
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const {
+            name,
+            wholesalePrice,
+            retailPrice,
+            wholesaler,
+            description,
+            purchaseDate,
+            quantity,
+            warrantyDate,
+            maxDiscount
+        } = req.body;
+
+        let image = '';
+        if (req.file) image = req.file.filename;
+
+        const product = new Product({
+            name,
+            wholesalePrice,
+            retailPrice,
+            wholesaler,
+            description,
+            purchaseDate,
+            quantity,
+            warrantyDate,
+            maxDiscount,
+            image
+        });
+
         await product.save();
 
         res.json(product);
@@ -105,7 +106,7 @@ router.get('/:product_id', auth, async (req, res) => {
             return res.status(400).json({ msg: 'This product does not exist' });
         }
 
-        res.send(product);
+        res.json(product);
 
     } catch (err) {
         console.error(err.message);
@@ -121,20 +122,28 @@ router.get('/:product_id', auth, async (req, res) => {
 // @route   PATCH api/product/:product_id
 // @desc    Update product by id
 // @access  Private
-router.patch('/:product_id', auth, async (req, res) => {
+router.patch('/:product_id', [
+    auth,
+    upload.single('image')
+], async (req, res) => {
 
-    const { name, wholesalePrice, retailPrice, wholesaler, description, image } = req.body;
-
-    let productFields = {};
-
-    if (name) productFields.name = name;
-    if (wholesalePrice) productFields.wholesalePrice = wholesalePrice;
-    if (retailPrice) productFields.retailPrice = retailPrice;
-    if (wholesaler) productFields.wholesaler = wholesaler;
-    if (description) productFields.description = description;
-    if (image) productFields.image = image;
 
     try {
+
+        const { name, wholesalePrice, retailPrice, wholesaler, description } = req.body;
+
+        let productFields = {};
+
+        let image;
+
+        if (req.file) image = req.file.filename;
+
+        if (name) productFields.name = name;
+        if (wholesalePrice) productFields.wholesalePrice = wholesalePrice;
+        if (retailPrice) productFields.retailPrice = retailPrice;
+        if (wholesaler) productFields.wholesaler = wholesaler;
+        if (description) productFields.description = description;
+        if (image) productFields.image = image;
 
         const product = await Product.findByIdAndUpdate({ _id: req.params.product_id }, productFields);
 
@@ -144,7 +153,7 @@ router.patch('/:product_id', auth, async (req, res) => {
 
         await product.save();
 
-        res.send(product);
+        res.json(product);
 
     } catch (err) {
         console.error(err.message);

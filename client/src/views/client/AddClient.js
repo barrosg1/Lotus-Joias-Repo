@@ -1,12 +1,10 @@
 
 import {
-    Container,
     Row,
     Col,
     Form,
     FormGroup,
     Input,
-    Label,
     Button,
     Card,
     CardHeader,
@@ -15,8 +13,13 @@ import {
 
 import React, { useState } from 'react'
 import GeneralHeader from 'components/Headers/GeneralHeader';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types'
+import Alert from '../../layouts/Alert';
 
-const AddClient = () => {
+import { addClient } from '../../redux/actions/clientActions';
+
+const AddClient = ({ addClient }) => {
 
     const [formData, setFormData] = useState({
         firstName: '',
@@ -45,7 +48,7 @@ const AddClient = () => {
             notes
         }
 
-        // addProducts(newProduct);
+        addClient(newProduct);
 
     }
 
@@ -54,6 +57,7 @@ const AddClient = () => {
             <GeneralHeader />
             <Col xl="8">
                 <Card className="bg-secondary shadow">
+                    <Alert />
                     <CardHeader className="bg-white border-0">
                         <Row className="align-items-center">
                             <Col xs="8">
@@ -199,4 +203,9 @@ const AddClient = () => {
     )
 }
 
-export default AddClient;
+AddClient.propTypes = {
+    addClient: PropTypes.func.isRequired,
+}
+
+
+export default connect(null, { addClient })(AddClient);

@@ -32,11 +32,11 @@ const AddProduct = ({ addProduct }) => {
         wholesalePrice: '2.99',
         retailPrice: '19.00',
         wholesaler: 'rarissima',
-        image: null,
+        image: '',
         description: 'hello bitch',
-        purchaseDate: '',
+        purchaseDate: '2021-08-03',
         quantity: '100',
-        warrantyDate: '',
+        warrantyDate: '2021-08-03',
         maxDiscount: '10',
     });
 
@@ -99,9 +99,9 @@ const AddProduct = ({ addProduct }) => {
         <>
             <GeneralHeader />
             <Container>
+                <Alert />
                 <Col xl="12">
                     <Card className="bg-secondary shadow">
-                        <Alert />
                         <CardHeader className="bg-white border-0">
                             <Row className="align-items-center">
                                 <Col xs="8">

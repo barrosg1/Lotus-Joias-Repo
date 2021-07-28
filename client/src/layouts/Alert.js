@@ -1,9 +1,10 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Button, Col } from 'reactstrap';
 import { removeAlert } from 'redux/actions/alertActions';
+import { isEmpty } from '../utils/isEmpty';
 
 
 
@@ -18,18 +19,19 @@ const Alert = ({ alerts, removeAlert }) => {
 
     }
 
-    return (
-        <>
-            {
-                (!alerts === null || alerts.length !== 0) &&
+    let isAlert = '';
+
+    if (!isEmpty(alerts)) {
+
+        isAlert = (
+            <Fragment>
 
                 <div className={`alert-style alert alert-${alerts.alertType}`}>
 
-
                     {
 
-                        alerts.msgData && alerts.msgData.map(alert => {
-                            return <p>{alert.msg}</p>
+                        alerts.msgData && alerts.msgData.map((alert, key) => {
+                            return <p key={key}>{alert.msg}</p>
                         })
 
                     }
@@ -39,7 +41,6 @@ const Alert = ({ alerts, removeAlert }) => {
                         alerts.redirectPath &&
                         alerts.redirectValue && (
 
-
                             <Button className='alert-btn' color="primary" size="sm" onClick={() => submit(alerts.redirectPath)}>{alerts.redirectValue}</Button>
 
                         )
@@ -47,9 +48,16 @@ const Alert = ({ alerts, removeAlert }) => {
 
                 </div>
 
-            }
-        </>
 
+            </Fragment>
+        )
+    }
+
+    return (
+
+        <>
+            {isAlert}
+        </>
     );
 }
 

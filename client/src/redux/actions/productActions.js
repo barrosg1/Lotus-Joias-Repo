@@ -1,14 +1,20 @@
 import axios from "axios";
+import { setAlert } from './alertActions';
+
 
 import {
 
     GET_PRODUCTS_SUCCESS,
     GET_PRODUCTS_FAIL,
     CREATE_PRODUCT_SUCCESS,
-    CREATE_PRODUCT_FAIL
+    CREATE_PRODUCT_FAIL,
+    UPDATE_PRODUCT_SUCCESS,
+    UPDATE_PRODUCT_FAIL,
+    GET_PRODUCT_SUCCESS,
+    GET_PRODUCT_FAIL
 } from "../types/types";
 
-import { setAlert } from './alertActions';
+
 
 export const getProducts = () => async dispatch => {
 
@@ -40,6 +46,8 @@ export const getProducts = () => async dispatch => {
 };
 
 export const addProduct = (data) => async dispatch => {
+
+    console.log('Clicked!')
 
     const config = { headers: { "Content-Type": "multipart/form-data" } }
 
@@ -74,4 +82,82 @@ export const addProduct = (data) => async dispatch => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
     }
+};
+
+export const getProduct = (productId) => async dispatch => {
+
+    try {
+
+        const res = await axios.get(`/api/product/${productId}`);
+
+
+        dispatch({
+            type: GET_PRODUCT_SUCCESS,
+            payload: res.data
+        });
+
+
+    } catch (err) {
+
+        const errors = err.response.data.errors;
+
+        if (errors) {
+
+            dispatch(setAlert(errors, 'danger'));
+
+        }
+
+        console.log(err)
+
+        dispatch({
+            type: GET_PRODUCT_FAIL,
+            errors: err.response.data
+
+        });
+
+
+    }
+};
+
+export const editProduct = (data, productId) => async dispatch => {
+
+    try {
+
+        const config = { headers: { "Content-Type": "multipart/form-data" } }
+
+        const res = await axios.patch(`/api/product/${productId}`, data, config);
+
+
+        dispatch({
+            type: UPDATE_PRODUCT_SUCCESS,
+            payload: res.data
+        });
+
+        dispatch(setAlert([{ msg: 'Product updated' }], 'success', 'View all products', '/admin/products'));
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+
+    } catch (err) {
+
+
+        const errors = err.response.data.errors;
+
+        if (errors) {
+
+            dispatch(setAlert(errors, 'danger'));
+
+        }
+
+        dispatch({
+            type: UPDATE_PRODUCT_FAIL,
+            errors: err.response.data
+
+        });
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+
+    }
+
 };

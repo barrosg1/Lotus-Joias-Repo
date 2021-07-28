@@ -20,7 +20,6 @@ app.get('/', (req, res) => res.send('API is working!'));
 // define routes
 app.use('/api/users', require('./routes/api/users'));
 app.use('/api/auth', require('./routes/api/auth'));
-app.use('/api/profile', require('./routes/api/profile'));
 app.use('/api/product', require('./routes/api/product'));
 app.use('/api/client', require('./routes/api/client'));
 app.use('/api/client/transaction', require('./routes/api/transactions'));

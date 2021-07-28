@@ -6,10 +6,7 @@ import {
 } from "reactstrap";
 
 import MUIDataTable from "mui-datatables";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
 import React, { useState, useEffect } from 'react';
-import { Redirect, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from 'prop-types'
 
@@ -19,9 +16,10 @@ import { getProducts } from '../../redux/actions/productActions';
 import { useSelector } from "react-redux";
 
 
-const Products = ({ getProducts, productInfo: { products, loading } }) => {
+const Products = ({ getProducts, history }) => {
 
-    // let products = useSelector(state => state.productReducer.products);
+    const products = useSelector(state => state.productReducer.products);
+    const loading = useSelector(state => state.productReducer.loading);
 
     // const [data, setData] = useState([]);
 
@@ -32,15 +30,15 @@ const Products = ({ getProducts, productInfo: { products, loading } }) => {
     }, [getProducts]);
 
 
-    const editProduct = (id) => { alert(id); }
+    const gotToProductPage = (id) => { history.push(`/admin/edit-product/${id}`); }
 
-    const [columns, setColumns] = useState([
+    const columns = [
         {
             name: 'View Product',
             options: {
                 customBodyRender: (value, tableMeta, updateValue) => {
                     return (
-                        <Button onClick={() => editProduct(value)} color="secondary" className>Edit</Button>
+                        <Button onClick={() => gotToProductPage(value)} color="secondary" className>Edit</Button>
                     );
                 },
                 filter: false
@@ -55,7 +53,7 @@ const Products = ({ getProducts, productInfo: { products, loading } }) => {
                     return (
                         <Media
                             className="product-image-table"
-                            src={`/images/${value}`}
+                            src={`/public/images/${value}`}
                             alt="..."
                         />
                     );
@@ -92,7 +90,7 @@ const Products = ({ getProducts, productInfo: { products, loading } }) => {
                 filter: false
             }
         }
-    ]);
+    ];
 
     const constructedData = () => {
         const productList = [];
@@ -155,6 +153,7 @@ const Products = ({ getProducts, productInfo: { products, loading } }) => {
 
 Products.propTypes = {
     getProducts: PropTypes.func.isRequired,
+    getProductById: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({

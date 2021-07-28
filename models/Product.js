@@ -8,6 +8,10 @@ const ProductSchema = new Schema({
         trim: true,
         required: true
     },
+    category: {
+        type: String,
+
+    },
     wholesalePrice: {
         type: Number,
         required: true

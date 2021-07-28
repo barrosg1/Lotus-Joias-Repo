@@ -2,18 +2,19 @@ import {
     CREATE_CLIENT_SUCCESS,
     CREATE_CLIENT_FAIL,
     GET_CLIENTS_SUCCESS,
-    GET_CLIENTS_FAIL
+    GET_CLIENTS_FAIL,
 } from '../types/types'
 
 const initialState = {
     clients: null,
     client: null,
-    loading: true
+    loading: true,
+    errors: null
 };
 
 const clientReducer = (state = initialState, action) => {
 
-    const { type, payload } = action;
+    const { type, payload, errors } = action;
 
     switch (type) {
         case GET_CLIENTS_SUCCESS:
@@ -26,7 +27,8 @@ const clientReducer = (state = initialState, action) => {
             return {
                 ...state,
                 clients: null,
-                loading: false
+                loading: false,
+                errors
             }
         case CREATE_CLIENT_SUCCESS:
             return {
@@ -38,7 +40,8 @@ const clientReducer = (state = initialState, action) => {
             return {
                 ...state,
                 client: null,
-                loading: false
+                loading: false,
+                errors
             }
 
         default:

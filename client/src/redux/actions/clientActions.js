@@ -1,4 +1,6 @@
 import axios from "axios";
+import { setAlert } from './alertActions';
+
 
 import { GET_CLIENTS_SUCCESS, GET_CLIENTS_FAIL, CREATE_CLIENT_SUCCESS, CREATE_CLIENT_FAIL } from "../types/types";
 
@@ -40,9 +42,24 @@ export const addClient = (data) => async dispatch => {
             payload: res.data
         });
 
+        dispatch(setAlert([{ msg: 'Client saved' }], 'success', 'View all clients', '/admin/clients'));
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
     } catch (err) {
+
+        const errors = err.response.data.errors;
+
+        if (errors) {
+
+            dispatch(setAlert(errors, 'danger'));
+        }
+
         dispatch({
-            type: CREATE_CLIENT_FAIL
+            type: CREATE_CLIENT_FAIL,
+            errors: err.response.data
         })
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 };

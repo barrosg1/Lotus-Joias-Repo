@@ -1,6 +1,9 @@
 import MUIDataTable from "mui-datatables";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { connect } from "react-redux";
 import { Redirect, useHistory } from "react-router-dom";
+import PropTypes from 'prop-types'
+
 
 // reactstrap components
 import {
@@ -10,146 +13,37 @@ import {
 } from "reactstrap";
 
 import GeneralHeader from '../../components/Headers/GeneralHeader';
+import { getClients } from '../../redux/actions/clientActions';
 
-const Clients = () => {
+const Clients = ({ getClients, clients, loading }) => {
+
+    useEffect(() => {
+
+        getClients();
+
+    }, [getClients]);
 
     let history = useHistory();
 
-    // const [columns, setColumns] = useState(['First Name', 'Last Name', 'Phone', 'Email', 'Address']);
+    const constructedData = () => {
+        const clientList = [];
 
-    const [columns, setColumns] = useState([
-        {
-            name: 'First Name'
-        },
-        {
-            name: 'Last Name'
-        },
-        {
-            name: 'Email'
-        },
-        {
-            name: 'Phone'
-        },
-        {
-            name: 'Address'
-        }
-    ]);
+        !loading && clients && clients.forEach(client => {
 
-    const [data, setData] = useState([
-        [
-            'Gabriel',
-            'Barros',
-            '3478486073',
-            'mcgabe@gmail.com',
-            'xyz'
-        ],
-        [
-            'Mariana',
-            'Souza',
-            '9478486073',
-            'msouza@gmail.com',
-            '200 Balwin'
-        ],
-        [
-            'Gabriel',
-            'Barros',
-            '3478486073',
-            'mcgabe@gmail.com',
-            'xyz'
-        ],
-        [
-            'Mariana',
-            'Souza',
-            '9478486073',
-            'msouza@gmail.com',
-            '200 Balwin'
-        ],
-        [
-            'Gabriel',
-            'Barros',
-            '3478486073',
-            'mcgabe@gmail.com',
-            'xyz'
-        ],
-        [
-            'Mariana',
-            'Souza',
-            '9478486073',
-            'msouza@gmail.com',
-            '200 Balwin'
-        ],
-        [
-            'Mariana',
-            'Souza',
-            '9478486073',
-            'msouza@gmail.com',
-            '200 Balwin'
-        ],
-        [
-            'Gabriel',
-            'Barros',
-            '3478486073',
-            'mcgabe@gmail.com',
-            'xyz'
-        ],
-        [
-            'Mariana',
-            'Souza',
-            '9478486073',
-            'msouza@gmail.com',
-            '200 Balwin'
-        ],
-        [
-            'Gabriel',
-            'Barros',
-            '3478486073',
-            'mcgabe@gmail.com',
-            'xyz'
-        ],
-        [
-            'Mariana',
-            'Souza',
-            '9478486073',
-            'msouza@gmail.com',
-            '200 Balwin'
-        ],
-        [
-            'Mariana',
-            'Souza',
-            '9478486073',
-            'msouza@gmail.com',
-            '200 Balwin'
-        ],
-        [
-            'Gabriel',
-            'Barros',
-            '3478486073',
-            'mcgabe@gmail.com',
-            'xyz'
-        ],
-        [
-            'Mariana',
-            'Souza',
-            '9478486073',
-            'msouza@gmail.com',
-            '200 Balwin'
-        ],
-        [
-            'Gabriel',
-            'Barros',
-            '3478486073',
-            'mcgabe@gmail.com',
-            'xyz'
-        ],
-        [
-            'Mariana',
-            'Souza',
-            '9478486073',
-            'msouza@gmail.com',
-            '200 Balwin'
-        ],
+            clientList.push({
+                "First Name": client.firstName,
+                "Last Name": client.lastName,
+                "Email": client.email,
+                "Phone": client.phone,
+                "Address": client.address,
 
-    ]);
+            });
+        });
+
+        return clientList;
+    }
+
+    const columns = ['First Name', 'Last Name', 'Email', 'Phone', 'Address'];
 
     const onRowClick = () => {
 
@@ -157,7 +51,7 @@ const Clients = () => {
     }
 
     const options = {
-        responsive: 'standard',
+        responsive: 'responsive',
         selectableRows: false,
         onRowClick,
         rowsPerPageOptions: [5, 10, 25]
@@ -171,7 +65,7 @@ const Clients = () => {
             <Container>
                 <MUIDataTable
                     title={"Clients"}
-                    data={data}
+                    data={constructedData()}
                     columns={columns}
                     options={options}
                 />
@@ -182,7 +76,20 @@ const Clients = () => {
 
 }
 
-export default Clients;
+Clients.propTypes = {
+    getClients: PropTypes.func.isRequired,
+    clients: PropTypes.object.isRequired,
+    loading: PropTypes.object.isRequired,
+}
+
+const mapStateToProps = state => ({
+
+    clients: state.clientReducer.clients,
+    loading: state.clientReducer.loading
+
+});
+
+export default connect(mapStateToProps, { getClients })(Clients);
 
 
 

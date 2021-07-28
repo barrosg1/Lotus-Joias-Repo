@@ -18,270 +18,336 @@ import {
     Media
 } from 'reactstrap'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from "react-router-dom";
 import GeneralHeader from 'components/Headers/GeneralHeader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUpload } from '@fortawesome/free-solid-svg-icons';
+import { connect, useSelector } from 'react-redux';
+import { editProduct, getProduct } from '../../redux/actions/productActions';
+import PropTypes from 'prop-types'
+import Alert from 'layouts/Alert';
 
 
-const EditProduct = () => {
+const EditProduct = ({ getProduct, editProduct, match }) => {
+
+    const product = useSelector(state => state.productReducer.product);
+    const loading = useSelector(state => state.productReducer.loading);
+
     const [formData, setFormData] = useState({
         name: '',
         wholesalePrice: '',
         retailPrice: '',
         wholesaler: '',
-        image: '',
         description: '',
+        image: '',
+        purchaseDate: '',
+        quantity: '',
+        warrantyDate: '',
+        maxDiscount: '',
+
     });
 
-    const [fileUpload, setFileUpload] = useState({ imageFileURL: '' });
+    useEffect(() => {
 
-    const { name, wholesalePrice, retailPrice, wholesaler, image, description } = formData;
+        getProduct(match.params.product_id);
+
+
+    }, [match, getProduct]);
+
+    useEffect(() => {
+
+        // getProduct(match.params.product_id);
+
+        setFormData({
+            name: !loading && product.name ? product.name : '',
+            wholesalePrice: !loading && product.wholesalePrice ? product.wholesalePrice : '',
+            retailPrice: !loading && product.retailPrice ? product.retailPrice : '',
+            wholesaler: !loading && product.wholesaler ? product.wholesaler : '',
+            description: !loading && product.description ? product.description : '',
+            purchaseDate: !loading && product.purchaseDate ? product.purchaseDate : '',
+            quantity: !loading && product.quantity ? product.quantity : '',
+            warrantyDate: !loading && product.warrantyDate ? product.warrantyDate : '',
+            maxDiscount: !loading && product.maxDiscount ? product.maxDiscount : '',
+
+        });
+
+
+    }, [loading, product.description, product.maxDiscount, product.name, product.purchaseDate, product.quantity, product.retailPrice, product.warrantyDate, product.wholesalePrice, product.wholesaler]);
+
+
+
+
+
+    const [selectedFile, setSelectedFile] = useState();
+    const [fileUpload, setFileUpload] = useState({ imageFileURL: '' });
+    const [fileUploadName, setFileUploadName] = useState('Upload Image');
+
+    const { name, wholesalePrice, retailPrice, wholesaler, image, description, purchaseDate, quantity, warrantyDate, maxDiscount } = formData;
     const imageFileURL = fileUpload.imageFileURL;
 
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
     const handleImageChange = e => {
 
+        setFileUploadName(e.target.files[0].name);
         setFileUpload({ imageFileURL: URL.createObjectURL(e.target.files[0]) });
         setFormData({ ...formData, image: e.target.value });
+        setSelectedFile(e.target.files[0]);
+
+        console.log(`FILE Contents: ${JSON.stringify(e.target.files[0])}`)
 
     }
 
     const onSubmit = async e => {
         e.preventDefault();
 
-        const newProduct = {
-            name,
-            wholesalePrice,
-            retailPrice,
-            wholesaler,
-            image: imageFileURL,
-            description,
-        }
+        let bodyFormData = new FormData();
 
-        // addProducts(newProduct);
+        bodyFormData.append('name', name);
+        bodyFormData.append('wholesalePrice', wholesalePrice);
+        bodyFormData.append('retailPrice', retailPrice);
+        bodyFormData.append('wholesaler', wholesaler);
+        bodyFormData.append('description', description);
+        bodyFormData.append('purchaseDate', purchaseDate);
+        bodyFormData.append('quantity', quantity);
+        bodyFormData.append('warrantyDate', warrantyDate);
+        bodyFormData.append('maxDiscount', maxDiscount);
+        bodyFormData.append('image', selectedFile);
+
+        editProduct(bodyFormData, match.params.product_id);
 
     }
 
     return (
         <>
             <GeneralHeader />
-            <Container fluid>
-                <Row>
-                    <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
-                        <Card className="card-profile shadow">
-                            <Row className="justify-content-center">
-                                <Col >
-                                    <CardImg top width="100%" height="300px" style={{ objectFit: 'cover', objectPosition: ['50', 50] }} src="https://www.brides.com/thmb/4PCnLR-h1HZuGHEP0AFkF0o8EiM=/1190x1190/smart/filters:no_upscale()/sq-b609e1c6078c460abc25857ae151bf2e.jpg" alt="Card image cap" />
-                                </Col>
-                            </Row>
-                            <CardBody>
-                                <div className="text-center">
-                                    <h3>
-                                        Anel de Ouro
-                                    </h3>
+            {
 
-                                    <div className="h5 font-weight-300">
-                                        <i className="ni location_pin mr-2" />
-                                        Product id: 123ksdfjkas
-                                    </div>
-                                    <div className="h4 mt-4">
-
-                                        Bought from:
-                                    </div><span>Marisa US</span>
-                                    <div className="h4 mt-4">
-
-                                        Wholesale Price:
-                                    </div><span>$2.99</span>
-                                    <div className="h4 mt-4">
-
-                                        Retail Price:
-                                    </div><span>$14.99</span>
-                                    <hr className="my-4" />
-
-                                    <Link to="/admin/products">
-                                        View all products
-                                    </Link>
-                                </div>
-                            </CardBody>
-                        </Card>
-                    </Col>
-
-                    <Col xl="8">
-                        <Card className="bg-secondary shadow">
-                            <CardHeader className="bg-white border-0">
-                                <Row className="align-items-center">
-                                    <Col xs="8">
-                                        <h3 className="mb-0">Edit Product</h3>
+                <Container fluid>
+                    <Alert />
+                    <Row>
+                        <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
+                            <Card className="card-profile shadow">
+                                <Row className="justify-content-center">
+                                    <Col >
+                                        <CardImg top width="100%" height="300px" style={{ objectFit: 'cover', objectPosition: ['50', 50] }} src="https://www.brides.com/thmb/4PCnLR-h1HZuGHEP0AFkF0o8EiM=/1190x1190/smart/filters:no_upscale()/sq-b609e1c6078c460abc25857ae151bf2e.jpg" alt="Card image cap" />
                                     </Col>
-
                                 </Row>
-                            </CardHeader>
-                            <CardBody>
-                                <Form onSubmit={(e) => onSubmit(e)}>
-                                    <h6 className="heading-small text-muted mb-4">
-                                        Product information
-                                    </h6>
-                                    <div className="pl-lg-4">
-                                        <Row>
-                                            <Col lg="6">
-                                                <FormGroup>
-                                                    <label
-                                                        className="form-control-label"
-                                                        htmlFor="input-name"
-                                                    >
-                                                        Product name
-                                                    </label>
-                                                    <Input
-                                                        className="form-control-alternative"
-                                                        placeholder="Product Name"
-                                                        type="text"
-                                                        name='name'
-                                                        value={name}
-                                                        onChange={e => onChange(e)}
+                                <CardBody>
+                                    <div className="text-center">
+                                        <h3>
+                                            {product.name}
+                                        </h3>
 
-                                                    />
-                                                </FormGroup>
-                                            </Col>
-                                            <Col lg="6">
-                                                <FormGroup>
-                                                    <label
-                                                        className="form-control-label"
-                                                        htmlFor="input-bought-from"
-                                                    >
-                                                        Bought From
-                                                    </label>
-                                                    <Input
-                                                        className="form-control-alternative"
-                                                        placeholder="Bought From"
-                                                        type="text"
-                                                        name='wholesaler'
-                                                        value={wholesaler}
-                                                        onChange={e => onChange(e)}
-                                                    />
-                                                </FormGroup>
-                                            </Col>
-                                        </Row>
+                                        <div className="h5 font-weight-300">
+                                            <i className="ni location_pin mr-2" />
+                                            Product id: {product._id}
+                                        </div>
+                                        <div className="h4 mt-4">
+
+                                            Bought from:
+                                        </div><span>{product.wholesaler}</span>
+                                        <div className="h4 mt-4">
+
+                                            Wholesale Price:
+                                        </div><span>${product.wholesalePrice}</span>
+                                        <div className="h4 mt-4">
+
+                                            Retail Price:
+                                        </div><span>${product.retailPrice}</span>
+                                        <hr className="my-4" />
+
+                                        <Link to="/admin/products">
+                                            View all products
+                                        </Link>
                                     </div>
+                                </CardBody>
+                            </Card>
+                        </Col>
 
-                                    <div className="pl-lg-4">
+                        <Col xl="8">
+                            <Card className="bg-secondary shadow">
+                                <CardHeader className="bg-white border-0">
+                                    <Row className="align-items-center">
+                                        <Col xs="8">
+                                            <h3 className="mb-0">Edit Product</h3>
+                                        </Col>
+
+                                    </Row>
+                                </CardHeader>
+                                <CardBody>
+                                    <Form onSubmit={e => onSubmit(e)}>
+                                        <h6 className="heading-small text-muted mb-4">
+                                            Product information
+                                        </h6>
+                                        <div className="pl-lg-4">
+                                            <Row>
+                                                <Col lg="6">
+                                                    <FormGroup>
+                                                        <label
+                                                            className="form-control-label"
+                                                            htmlFor="input-name"
+                                                        >
+                                                            Product name
+                                                        </label>
+                                                        <Input
+                                                            className="form-control-alternative"
+                                                            placeholder="Product Name"
+                                                            type="text"
+                                                            name='name'
+                                                            value={name}
+                                                            onChange={e => onChange(e)}
+
+                                                        />
+                                                    </FormGroup>
+                                                </Col>
+                                                <Col lg="6">
+                                                    <FormGroup>
+                                                        <label
+                                                            className="form-control-label"
+                                                            htmlFor="input-bought-from"
+                                                        >
+                                                            Bought From
+                                                        </label>
+                                                        <Input
+                                                            className="form-control-alternative"
+                                                            placeholder="Bought From"
+                                                            type="text"
+                                                            name='wholesaler'
+                                                            value={wholesaler}
+                                                            onChange={e => onChange(e)}
+                                                        />
+                                                    </FormGroup>
+                                                </Col>
+                                            </Row>
+                                        </div>
+
+                                        <div className="pl-lg-4">
+                                            <Row>
+                                                <Col lg="6">
+                                                    <FormGroup>
+                                                        <label
+                                                            className="form-control-label"
+                                                            htmlFor="input-wholesale-price"
+                                                        >
+                                                            Wholesale Price
+                                                        </label>
+                                                        <Input
+                                                            className="form-control-alternative"
+                                                            placeholder="Wholesale Price"
+                                                            type="text"
+                                                            name='wholesalePrice'
+                                                            value={wholesalePrice}
+                                                            onChange={e => onChange(e)}
+                                                        />
+                                                    </FormGroup>
+                                                </Col>
+
+                                                <Col lg="6">
+                                                    <FormGroup>
+                                                        <label
+                                                            className="form-control-label"
+                                                            htmlFor="input-retail-price"
+                                                        >
+                                                            Retail Price
+                                                        </label>
+                                                        <Input
+                                                            className="form-control-alternative"
+                                                            placeholder="Retail Price"
+                                                            type="text"
+                                                            name='retailPrice'
+                                                            value={retailPrice}
+                                                            onChange={e => onChange(e)}
+                                                        />
+                                                    </FormGroup>
+                                                </Col>
+
+                                            </Row>
+                                        </div>
+
                                         <Row>
-                                            <Col lg="6">
-                                                <FormGroup>
-                                                    <label
-                                                        className="form-control-label"
-                                                        htmlFor="input-wholesale-price"
-                                                    >
-                                                        Wholesale Price
-                                                    </label>
-                                                    <Input
-                                                        className="form-control-alternative"
-                                                        placeholder="Wholesale Price"
-                                                        type="text"
-                                                        name='wholesalePrice'
-                                                        value={wholesalePrice}
-                                                        onChange={e => onChange(e)}
-                                                    />
-                                                </FormGroup>
-                                            </Col>
-
-                                            <Col lg="6">
-                                                <FormGroup>
+                                            <Col ls="12">
+                                                <div className="pl-lg-4">
                                                     <label
                                                         className="form-control-label"
                                                         htmlFor="input-retail-price"
                                                     >
-                                                        Retail Price
+                                                        Product Description
                                                     </label>
-                                                    <Input
-                                                        className="form-control-alternative"
-                                                        placeholder="Retail Price"
-                                                        type="text"
-                                                        name='retailPrice'
-                                                        value={retailPrice}
-                                                        onChange={e => onChange(e)}
-                                                    />
-                                                </FormGroup>
-                                            </Col>
-
-                                        </Row>
-                                    </div>
-
-                                    <Row>
-                                        <Col ls="12">
-                                            <div className="pl-lg-4">
-                                                <label
-                                                    className="form-control-label"
-                                                    htmlFor="input-retail-price"
-                                                >
-                                                    Product Description
-                                                </label>
-                                                <FormGroup>
-                                                    <Input
-                                                        className="form-control-alternative"
-                                                        placeholder="Product Description"
-                                                        rows="4"
-                                                        type="textarea"
-                                                        name='description'
-                                                        value={description}
-                                                        onChange={e => onChange(e)}
-                                                    />
-                                                </FormGroup>
-                                            </div>
-                                        </Col>
-                                    </Row>
-
-                                    <hr className="my-4" />
-
-                                    <Row>
-                                        <Col sm={12}>
-                                            <div className="input-group mb-3 px-2 py-2 rounded-pill bg-white shadow-sm">
-                                                <Input
-                                                    id="upload"
-                                                    type="file"
-                                                    className="form-control border-0"
-                                                    onChange={e => handleImageChange(e)}
-                                                    name="image"
-                                                    value={image}
-                                                    accept="image/*"
-                                                />
-                                                <Label id="upload-label" for="upload" className="font-weight-light text-muted">Upload Image</Label>
-                                                <div className="input-group-append">
-                                                    <Label for="upload" className="btn btn-light m-0 rounded-pill px-4">
-                                                        <FontAwesomeIcon className="mr-2 text-muted" icon={faUpload} />
-                                                        <small className="text-uppercase font-weight-bold text-muted">Choose file</small>
-                                                    </Label>
+                                                    <FormGroup>
+                                                        <Input
+                                                            className="form-control-alternative"
+                                                            placeholder="Product Description"
+                                                            rows="4"
+                                                            type="textarea"
+                                                            name='description'
+                                                            value={description}
+                                                            onChange={e => onChange(e)}
+                                                        />
+                                                    </FormGroup>
                                                 </div>
-                                            </div>
+                                            </Col>
+                                        </Row>
 
-                                            <p className="font-italic text-black text-center">The image uploaded will be rendered inside the box below.</p>
-                                            <div className="image-area mt-4">
-                                                {
-                                                    imageFileURL ?
-                                                        <Media
-                                                            id="imageResult"
-                                                            src={imageFileURL}
-                                                            alt=""
-                                                            className="img-fluid rounded shadow-sm mx-auto d-block"
-                                                        /> :
+                                        <hr className="my-4" />
 
-                                                        <p>Uploaded image result</p>
-                                                }
-                                            </div>
-                                        </Col>
-                                    </Row>
+                                        <Row>
+                                            <Col sm={12}>
+                                                <div className="input-group mb-3 px-2 py-2 rounded-pill bg-white shadow-sm">
+                                                    <Input
+                                                        id="upload"
+                                                        type="file"
+                                                        className="form-control border-0"
+                                                        onChange={e => handleImageChange(e)}
+                                                        name="image"
+                                                        value={image}
+                                                        accept="image/*"
+                                                    />
+                                                    <Label id="upload-label" for="upload" className="font-weight-light text-muted">{fileUploadName}</Label>
+                                                    <div className="input-group-append">
+                                                        <Label for="upload" className="btn btn-light m-0 rounded-pill px-4">
+                                                            <FontAwesomeIcon className="mr-2 text-muted" icon={faUpload} />
+                                                            <small className="text-uppercase font-weight-bold text-muted">Choose file</small>
+                                                        </Label>
+                                                    </div>
+                                                </div>
 
-                                    <Button className="submit-btn" type="submit">Submit</Button>
-                                </Form>
-                            </CardBody>
-                        </Card>
-                    </Col>
-                </Row>
-            </Container>
+                                                <p className="font-italic text-black text-center">The image uploaded will be rendered inside the box below.</p>
+                                                <div className="image-area mt-4">
+                                                    {
+                                                        imageFileURL ?
+                                                            <Media
+                                                                id="imageResult"
+                                                                src={imageFileURL}
+                                                                alt=""
+                                                                className="img-fluid rounded shadow-sm mx-auto d-block"
+                                                            /> :
+
+                                                            <p>Uploaded image result</p>
+                                                    }
+                                                </div>
+                                            </Col>
+                                        </Row>
+
+                                        <Button className="submit-btn" type="submit">Submit</Button>
+                                    </Form>
+                                </CardBody>
+                            </Card>
+                        </Col>
+                    </Row>
+                </Container>
+
+            }
+
         </>
     )
 }
 
-export default EditProduct;
+EditProduct.propTypes = {
+
+    getProduct: PropTypes.func.isRequired,
+    editProduct: PropTypes.func.isRequired,
+}
+
+export default connect(null, { getProduct, editProduct })(EditProduct);
