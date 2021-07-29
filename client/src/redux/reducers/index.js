@@ -4,6 +4,7 @@ import clientReducer from './client';
 import productReducer from './product';
 import profileReducer from './profile';
 import alertReducer from './alert';
+import categoryReducer from './category';
 
 
 export default combineReducers({
@@ -11,5 +12,6 @@ export default combineReducers({
     clientReducer,
     productReducer,
     profileReducer,
-    alertReducer
+    alertReducer,
+    categoryReducer
 });

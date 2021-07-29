@@ -78,11 +78,22 @@ var routes = [
   },
 
   {
-    path: "/edit-product",
-    name: "Tables",
+    name: "Manage",
     icon: "ni ni-bullet-list-67 text-red",
-    component: Tables,
-    layout: "/admin",
+    sub: [{
+      path: "/categories",
+      name: "View Categories",
+      component: Maps,
+      layout: "/admin",
+    },
+    {
+      path: "/add-product",
+      name: "New Category",
+      component: Maps,
+      layout: "/admin",
+    },
+
+    ]
   },
   {
     path: "/login",

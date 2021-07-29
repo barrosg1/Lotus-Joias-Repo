@@ -11,7 +11,9 @@ import {
     UPDATE_PRODUCT_SUCCESS,
     UPDATE_PRODUCT_FAIL,
     GET_PRODUCT_SUCCESS,
-    GET_PRODUCT_FAIL
+    GET_PRODUCT_FAIL,
+    DELETE_PRODUCT_SUCCESS,
+    DELETE_PRODUCT_FAIL
 } from "../types/types";
 
 
@@ -72,12 +74,16 @@ export const addProduct = (data) => async dispatch => {
 
             dispatch(setAlert(errors, 'danger'));
 
+        } else {
+
+            dispatch(setAlert([{ msg: 'Error: There was a problem adding a new product' }], 'danger'));
         }
 
         dispatch({
             type: CREATE_PRODUCT_FAIL,
             errors: err.response.data
         });
+
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -127,7 +133,6 @@ export const editProduct = (data, productId) => async dispatch => {
 
         const res = await axios.patch(`/api/product/${productId}`, data, config);
 
-
         dispatch({
             type: UPDATE_PRODUCT_SUCCESS,
             payload: res.data
@@ -137,9 +142,7 @@ export const editProduct = (data, productId) => async dispatch => {
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
-
     } catch (err) {
-
 
         const errors = err.response.data.errors;
 
@@ -156,8 +159,41 @@ export const editProduct = (data, productId) => async dispatch => {
         });
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+};
+
+export const deleteProduct = (productId) => async dispatch => {
+
+    try {
+
+        await axios.delete(`/api/product/${productId}`);
+
+        dispatch({
+            type: DELETE_PRODUCT_SUCCESS,
+        });
+
+    } catch (err) {
+
+
+        const errors = err.response.data.errors;
+
+        if (errors) {
+
+            dispatch(setAlert(errors, 'danger'));
+
+        }
+
+        dispatch({
+            type: DELETE_PRODUCT_FAIL,
+            errors: err.response.data
+
+        });
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
 
 
     }
+
+
 
 };

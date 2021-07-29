@@ -1,7 +1,7 @@
 import MUIDataTable from "mui-datatables";
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from "react-redux";
-import { Redirect, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import PropTypes from 'prop-types'
 
 
@@ -9,6 +9,7 @@ import PropTypes from 'prop-types'
 import {
 
     Container,
+    Button
 
 } from "reactstrap";
 
@@ -43,24 +44,63 @@ const Clients = ({ getClients, clients, loading }) => {
         return clientList;
     }
 
-    const columns = ['First Name', 'Last Name', 'Email', 'Phone', 'Address'];
+    const goToClientPage = (id) => { history.push(`/admin/edit-client/${id}`); }
 
-    const onRowClick = () => {
+    const columns = [
 
-        history.push("/admin");
-    }
+        {
+            name: 'View Client',
+            options: {
+                customBodyRender: (value, tableMeta, updateValue) => {
+                    return (
+                        <Button onClick={() => goToClientPage(value)} color="secondary" className>Edit</Button>
+                    );
+                },
+                filter: false
+            }
+
+        },
+        {
+            name: 'First Name',
+            options: {
+                filter: false
+            }
+        },
+        {
+            name: 'Last Name',
+            options: {
+                filter: false
+            }
+        },
+        {
+            name: 'Email',
+            options: {
+                filter: false
+            }
+        },
+        {
+            name: 'Phone',
+            options: {
+                filter: false
+            }
+        },
+        {
+            name: 'Address',
+            options: {
+                filter: false
+            }
+        },
+    ]
 
     const options = {
         responsive: 'responsive',
         selectableRows: false,
-        onRowClick,
         rowsPerPageOptions: [5, 10, 25]
     };
 
 
     return (
         <>
-
             <GeneralHeader />
             <Container>
                 <MUIDataTable

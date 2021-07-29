@@ -13,27 +13,39 @@ import {
     CardBody
 } from 'reactstrap'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUpload } from '@fortawesome/free-solid-svg-icons';
 import GeneralHeader from 'components/Headers/GeneralHeader';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import PropTypes from 'prop-types'
 import { addProduct } from 'redux/actions/productActions';
 import Alert from '../../layouts/Alert';
+import { getProductCategories } from 'redux/actions/categoryActions';
+
 
 //mport axios from "axios";
 
 
-const AddProduct = ({ addProduct }) => {
+const AddProduct = ({ addProduct, getProductCategories }) => {
+
+    const productCategories = useSelector(state => state.categoryReducer.productCategories);
+
+    useEffect(() => {
+
+        // console.log(`Product categories: ${JSON.stringify(productCategories)}`);
+
+        getProductCategories();
+
+    }, [getProductCategories]);
 
     const [formData, setFormData] = useState({
+        category: '',
         name: 'Some Product',
         wholesalePrice: '2.99',
         retailPrice: '19.00',
         wholesaler: 'rarissima',
-        image: '',
-        description: 'hello bitch',
+        description: '',
         purchaseDate: '2021-08-03',
         quantity: '100',
         warrantyDate: '2021-08-03',
@@ -45,6 +57,7 @@ const AddProduct = ({ addProduct }) => {
     const [fileUploadName, setFileUploadName] = useState('Upload Image');
 
     const {
+        category,
         name,
         wholesalePrice,
         retailPrice,
@@ -80,6 +93,7 @@ const AddProduct = ({ addProduct }) => {
 
         let bodyFormData = new FormData();
 
+        bodyFormData.append('category', category);
         bodyFormData.append('name', name);
         bodyFormData.append('wholesalePrice', wholesalePrice);
         bodyFormData.append('retailPrice', retailPrice);
@@ -90,6 +104,12 @@ const AddProduct = ({ addProduct }) => {
         bodyFormData.append('warrantyDate', warrantyDate);
         bodyFormData.append('maxDiscount', maxDiscount);
         bodyFormData.append('image', selectedFile);
+
+        // console.log(`Add product: ${JSON.stringify(bodyFormData)}`)
+
+        // for (var pair of bodyFormData.entries()) {
+        //     console.log(pair[0] + ', ' + pair[1]);
+        // }
 
         addProduct(bodyFormData);
 
@@ -117,7 +137,32 @@ const AddProduct = ({ addProduct }) => {
                                 </h6>
                                 <div className="pl-lg-4">
                                     <Row>
-                                        <Col lg="6">
+                                        <Col lg="4">
+                                            <FormGroup>
+                                                <label
+                                                    className="form-control-label"
+                                                    htmlFor="input-last-name"
+                                                >
+                                                    Category
+                                                </label>
+                                                <Input
+                                                    type="select"
+                                                    name="category"
+                                                    placeholder="Choose Category"
+                                                    value={category}
+                                                    onChange={e => onChange(e)}
+                                                >
+                                                    <option value="" selected disabled hidden>Choose Category</option>
+                                                    {
+                                                        productCategories && productCategories.map(productCategory => (
+                                                            <option>{productCategory.name}</option>
+                                                        ))
+                                                    }
+
+                                                </Input>
+                                            </FormGroup>
+                                        </Col>
+                                        <Col lg="4">
                                             <FormGroup>
                                                 <label
                                                     className="form-control-label"
@@ -136,7 +181,7 @@ const AddProduct = ({ addProduct }) => {
                                                 />
                                             </FormGroup>
                                         </Col>
-                                        <Col lg="6">
+                                        <Col lg="4">
                                             <FormGroup>
                                                 <label
                                                     className="form-control-label"
@@ -357,7 +402,8 @@ const AddProduct = ({ addProduct }) => {
 
 AddProduct.propTypes = {
     addProduct: PropTypes.func.isRequired,
+    getProductCategories: PropTypes.func.isRequired,
 
 }
 
-export default connect(null, { addProduct })(AddProduct);
+export default connect(null, { addProduct, getProductCategories })(AddProduct);

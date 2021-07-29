@@ -34,7 +34,7 @@ const clientReducer = (state = initialState, action) => {
             return {
                 ...state,
                 client: payload,
-                loading: false
+                loading: true
             }
         case CREATE_CLIENT_FAIL:
             return {

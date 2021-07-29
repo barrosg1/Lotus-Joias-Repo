@@ -6,7 +6,7 @@ import {
 } from "reactstrap";
 
 import MUIDataTable from "mui-datatables";
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from "react-redux";
 import PropTypes from 'prop-types'
 
@@ -21,13 +21,11 @@ const Products = ({ getProducts, history }) => {
     const products = useSelector(state => state.productReducer.products);
     const loading = useSelector(state => state.productReducer.loading);
 
-    // const [data, setData] = useState([]);
-
     useEffect(() => {
 
         getProducts();
 
-    }, [getProducts]);
+    }, [getProducts, loading]);
 
 
     const gotToProductPage = (id) => { history.push(`/admin/edit-product/${id}`); }
@@ -53,7 +51,7 @@ const Products = ({ getProducts, history }) => {
                     return (
                         <Media
                             className="product-image-table"
-                            src={`/public/images/${value}`}
+                            src={!value ? 'https://i.stack.imgur.com/mwFzF.png' : `/images/${value}`}
                             alt="..."
                         />
                     );
@@ -61,6 +59,12 @@ const Products = ({ getProducts, history }) => {
                 filter: false
             }
 
+        },
+        {
+            name: 'Category',
+            options: {
+                filter: true
+            }
         },
         {
             name: 'Product Name',
@@ -98,6 +102,7 @@ const Products = ({ getProducts, history }) => {
         !loading && products && products.forEach(product => {
 
             productList.push({
+                "Category": product.category,
                 "View Product": product._id,
                 "Product Image": product.image,
                 "Product Name": product.name,
@@ -111,20 +116,12 @@ const Products = ({ getProducts, history }) => {
         return productList;
     }
 
-
-    // // const onRowClick = () => {
-
-    // //     history.push("/admin");
-    // // }
-
-
     const options = {
         responsive: 'vertical',
         selectableRows: false,
         fixedHeader: true,
         fixedSelectColumn: true,
         tableBodyHeight: '700px',
-        // onRowClick,
         rowsPerPageOptions: [5, 10, 25]
 
     };
@@ -136,13 +133,21 @@ const Products = ({ getProducts, history }) => {
 
             <Container>
 
-                <MUIDataTable
-                    title={"Products"}
-                    data={constructedData()}
-                    columns={columns}
-                    options={options}
-                />
+                {
+                    loading ? (
+                        <p>Loading...</p>
+                    )
+                        :
 
+                        (
+                            <MUIDataTable
+                                title={"Products"}
+                                data={constructedData()}
+                                columns={columns}
+                                options={options}
+                            />
+                        )
+                }
 
             </Container>
 

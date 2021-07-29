@@ -20,6 +20,8 @@ import Profile from './views/profile/Profile';
 import Products from './views/product/Products';
 import EditProduct from './views/product/EditProduct';
 import AddProduct from './views/product/AddProduct';
+import Categories from './views/category/Categories';
+
 
 // === Client Components ===
 import Clients from './views/client/Clients';
@@ -50,20 +52,14 @@ function App() {
                     <Route exact path={`${AUTH}/login`} component={AuthLayout} />
                     <PrivateRoute exact path={`${ADMIN}/user-profile`} component={Profile} />
                     <PrivateRoute exact path={`${ADMIN}/clients`} component={Clients} />
+                    <PrivateRoute exact path={`${ADMIN}/categories`} component={Categories} />
                     <PrivateRoute exact path={`${ADMIN}/products`} component={Products} />
                     <PrivateRoute exact path={`${ADMIN}/add-product`} component={AddProduct} />
                     <PrivateRoute exact path={`${ADMIN}/add-client`} component={AddClient} />
                     <PrivateRoute exact path={`${ADMIN}/edit-product/:product_id`} component={EditProduct} />
+                    <PrivateRoute exact path={`${ADMIN}/edit-client/:client_id`} component={EditProduct} />
                     <PrivateRoute exact path={ADMIN} component={AdminView} />
-                    {/* 
-                    <Route exact path={`${AUTH}/login`} component={AuthLayout} />
-                    <PrivateRoute exact path={`${ADMIN}/user-profile`} component={Profile} isAuthenticated={true} />
-                    <PrivateRoute exact path={`${ADMIN}/clients`} component={Clients} isAuthenticated={true} />
-                    <PrivateRoute exact path={`${ADMIN}/products`} component={Products} isAuthenticated={true} />
-                    <PrivateRoute exact path={`${ADMIN}/add-product`} component={AddProduct} isAuthenticated={true} />
-                    <PrivateRoute exact path={`${ADMIN}/add-client`} component={AddClient} isAuthenticated={true} />
-                    <PrivateRoute exact path={`${ADMIN}/edit-product`} component={EditProduct} isAuthenticated={true} />
-                    <PrivateRoute exact path={ADMIN} component={AdminView} isAuthenticated={true} /> */}
+
 
                     <Redirect from="/" to={ADMIN} />
                 </Switch>

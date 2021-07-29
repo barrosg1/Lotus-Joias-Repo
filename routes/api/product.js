@@ -15,6 +15,7 @@ const upload = require('../../utils/fileUploadMiddleware');
 router.post('/', [
     auth,
     upload.single('image'),
+    check('category', 'Category is required').not().isEmpty(),
     check('name', 'Product name is required').not().isEmpty(),
     check('wholesalePrice', 'Wholesale price is required').not().isEmpty(),
     check('retailPrice', 'Retail price is required').not().isEmpty(),
@@ -23,7 +24,6 @@ router.post('/', [
     check('quantity', 'Quantity is required').not().isEmpty(),
     check('warrantyDate', 'Warranty date is required').not().isEmpty(),
     check('maxDiscount', 'Maximum discount is required').not().isEmpty(),
-    check('image', 'Image is required').not().isEmpty(),
 
 ], async (req, res) => {
 
@@ -36,6 +36,7 @@ router.post('/', [
         }
 
         const {
+            category,
             name,
             wholesalePrice,
             retailPrice,
@@ -47,10 +48,9 @@ router.post('/', [
             maxDiscount
         } = req.body;
 
-        let image = '';
-        if (req.file) image = req.file.filename;
 
         const product = new Product({
+            category,
             name,
             wholesalePrice,
             retailPrice,
@@ -60,7 +60,7 @@ router.post('/', [
             quantity,
             warrantyDate,
             maxDiscount,
-            image
+            image: req.file ? req.file.filename : ''
         });
 
         await product.save();

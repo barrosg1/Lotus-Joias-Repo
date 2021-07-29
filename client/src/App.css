@@ -106,10 +106,16 @@
 
   }
 
-  .alert-btn {
-
-  }
-  
+ .btn-delete {
+   background: #DC143C;
+   border: #DC143C;
+   color: white
+ }
+ .btn-delete:hover {
+  background: #DC143C;
+  border: #DC143C;
+  color: white
+ }
 
   /* ============================ */
 

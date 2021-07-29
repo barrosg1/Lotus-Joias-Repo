@@ -6,7 +6,9 @@ import {
     GET_PRODUCT_SUCCESS,
     GET_PRODUCT_FAIL,
     UPDATE_PRODUCT_SUCCESS,
-    UPDATE_PRODUCT_FAIL
+    UPDATE_PRODUCT_FAIL,
+    DELETE_PRODUCT_SUCCESS,
+    DELETE_PRODUCT_FAIL
 } from '../types/types'
 
 const initialState = {
@@ -40,7 +42,7 @@ const productReducer = (state = initialState, action) => {
             return {
                 ...state,
                 product: payload,
-                loading: false,
+                loading: true,
             }
         case CREATE_PRODUCT_FAIL:
             return {
@@ -69,13 +71,23 @@ const productReducer = (state = initialState, action) => {
             return {
                 ...state,
                 product: payload,
-                loading: false,
+                loading: true,
             }
 
         case UPDATE_PRODUCT_FAIL:
             return {
                 ...state,
                 product: null,
+                loading: false,
+                errors
+            }
+
+        case DELETE_PRODUCT_SUCCESS:
+            return { ...state, loading: true }
+
+        case DELETE_PRODUCT_FAIL:
+            return {
+                ...state,
                 loading: false,
                 errors
             }
