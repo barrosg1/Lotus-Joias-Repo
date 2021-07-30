@@ -8,7 +8,9 @@ import {
     UPDATE_PRODUCT_SUCCESS,
     UPDATE_PRODUCT_FAIL,
     DELETE_PRODUCT_SUCCESS,
-    DELETE_PRODUCT_FAIL
+    DELETE_PRODUCT_FAIL,
+    IMAGE_UPLOAD_SUCCESS,
+    IMAGE_UPLOAD_FAIL
 } from '../types/types'
 
 const initialState = {
@@ -86,6 +88,16 @@ const productReducer = (state = initialState, action) => {
             return { ...state, loading: true }
 
         case DELETE_PRODUCT_FAIL:
+            return {
+                ...state,
+                loading: false,
+                errors
+            }
+
+        case IMAGE_UPLOAD_SUCCESS:
+            return { ...state, loading: false }
+
+        case IMAGE_UPLOAD_FAIL:
             return {
                 ...state,
                 loading: false,

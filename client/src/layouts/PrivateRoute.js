@@ -1,12 +1,13 @@
 import React, { Fragment } from "react";
 import { Route, Redirect } from "react-router-dom";
-import { Container } from "reactstrap";
+import { Container, Spinner } from "reactstrap";
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import Sidebar from '../components/Sidebar/Sidebar';
 import AdminNavbar from '../components/Navbars/AdminNavbar';
 import AdminFooter from '../components/Footers/AdminFooter';
+
 
 const PrivateRoute = ({
     component: Component,
@@ -21,7 +22,7 @@ const PrivateRoute = ({
 
                 <Fragment>
                     {
-                        !user ? (<p>Loading...</p>)
+                        !user ? (<Spinner color="primary" />)
 
                             :
 

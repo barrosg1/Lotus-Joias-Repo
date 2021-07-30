@@ -45,7 +45,8 @@ router.post('/', [
             purchaseDate,
             quantity,
             warrantyDate,
-            maxDiscount
+            maxDiscount,
+            image
         } = req.body;
 
 
@@ -60,7 +61,7 @@ router.post('/', [
             quantity,
             warrantyDate,
             maxDiscount,
-            image: req.file ? req.file.filename : ''
+            image
         });
 
         await product.save();
@@ -130,15 +131,12 @@ router.patch('/:product_id', [
 
     try {
 
-        const { name, wholesalePrice, retailPrice, wholesaler, description } = req.body;
+        const { category, name, wholesalePrice, retailPrice, wholesaler, description, image } = req.body;
 
         let productFields = {};
 
-        let image;
-
-        if (req.file) image = req.file.filename;
-
         if (name) productFields.name = name;
+        if (category) productFields.category = category;
         if (wholesalePrice) productFields.wholesalePrice = wholesalePrice;
         if (retailPrice) productFields.retailPrice = retailPrice;
         if (wholesaler) productFields.wholesaler = wholesaler;

@@ -9,7 +9,8 @@ import PropTypes from 'prop-types'
 import {
 
     Container,
-    Button
+    Button,
+    Media
 
 } from "reactstrap";
 
@@ -53,7 +54,7 @@ const Clients = ({ getClients, clients, loading }) => {
             options: {
                 customBodyRender: (value, tableMeta, updateValue) => {
                     return (
-                        <Button onClick={() => goToClientPage(value)} color="secondary" className>Edit</Button>
+                        <Button onClick={() => goToClientPage(value)} color="secondary" className>View</Button>
                     );
                 },
                 filter: false
@@ -102,6 +103,7 @@ const Clients = ({ getClients, clients, loading }) => {
     return (
         <>
             <GeneralHeader />
+
             <Container>
                 <MUIDataTable
                     title={"Clients"}

@@ -13,7 +13,9 @@ import {
     GET_PRODUCT_SUCCESS,
     GET_PRODUCT_FAIL,
     DELETE_PRODUCT_SUCCESS,
-    DELETE_PRODUCT_FAIL
+    DELETE_PRODUCT_FAIL,
+    IMAGE_UPLOAD_SUCCESS,
+    IMAGE_UPLOAD_FAIL
 } from "../types/types";
 
 
@@ -49,9 +51,7 @@ export const getProducts = () => async dispatch => {
 
 export const addProduct = (data) => async dispatch => {
 
-    console.log('Clicked!')
-
-    const config = { headers: { "Content-Type": "multipart/form-data" } }
+    const config = { headers: { "Content-Type": "Application/json" } }
 
     try {
 
@@ -129,7 +129,7 @@ export const editProduct = (data, productId) => async dispatch => {
 
     try {
 
-        const config = { headers: { "Content-Type": "multipart/form-data" } }
+        const config = { headers: { "Content-Type": "Application/json" } }
 
         const res = await axios.patch(`/api/product/${productId}`, data, config);
 
@@ -193,7 +193,38 @@ export const deleteProduct = (productId) => async dispatch => {
 
 
     }
+};
 
+export const productImageUpload = (formData) => async dispatch => {
 
+    try {
+
+        const config = { headers: { "Content-Type": "multipart/form-data" } }
+
+        await axios.post(`/api/upload`, formData, config);
+
+        dispatch({
+            type: IMAGE_UPLOAD_SUCCESS,
+        });
+
+    } catch (err) {
+
+        const errors = err.response.data.errors;
+
+        if (errors) {
+
+            dispatch(setAlert(errors, 'danger'));
+
+        }
+
+        dispatch({
+            type: IMAGE_UPLOAD_FAIL,
+            errors: err.response.data
+
+        });
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    }
 
 };

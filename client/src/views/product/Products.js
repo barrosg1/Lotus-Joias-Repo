@@ -36,7 +36,7 @@ const Products = ({ getProducts, history }) => {
             options: {
                 customBodyRender: (value, tableMeta, updateValue) => {
                     return (
-                        <Button onClick={() => gotToProductPage(value)} color="secondary" className>Edit</Button>
+                        <Button onClick={() => gotToProductPage(value)} color="secondary" className>View</Button>
                     );
                 },
                 filter: false
@@ -51,7 +51,7 @@ const Products = ({ getProducts, history }) => {
                     return (
                         <Media
                             className="product-image-table"
-                            src={!value ? 'https://i.stack.imgur.com/mwFzF.png' : `/images/${value}`}
+                            src={!value ? require('../../assets/img/random/blank-image.png').default : `http://localhost:5000${value}`}
                             alt="..."
                         />
                     );
@@ -117,7 +117,7 @@ const Products = ({ getProducts, history }) => {
     }
 
     const options = {
-        responsive: 'vertical',
+        responsive: 'responsive',
         selectableRows: false,
         fixedHeader: true,
         fixedSelectColumn: true,
@@ -128,29 +128,16 @@ const Products = ({ getProducts, history }) => {
 
     return (
         <>
-
             <GeneralHeader />
-
             <Container>
-
-                {
-                    loading ? (
-                        <p>Loading...</p>
-                    )
-                        :
-
-                        (
-                            <MUIDataTable
-                                title={"Products"}
-                                data={constructedData()}
-                                columns={columns}
-                                options={options}
-                            />
-                        )
-                }
+                <MUIDataTable
+                    title={"Products"}
+                    data={constructedData()}
+                    columns={columns}
+                    options={options}
+                />
 
             </Container>
-
         </>
     )
 

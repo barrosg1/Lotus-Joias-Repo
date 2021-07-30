@@ -1,4 +1,15 @@
 
+import axios from 'axios';
+import React, { useState, useEffect } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUpload } from '@fortawesome/free-solid-svg-icons';
+import GeneralHeader from 'components/Headers/GeneralHeader';
+import { connect, useSelector } from 'react-redux';
+import PropTypes from 'prop-types'
+import { addProduct } from 'redux/actions/productActions';
+import Alert from '../../layouts/Alert';
+import { getProductCategories } from 'redux/actions/categoryActions';
+
 import {
     Container,
     Row,
@@ -11,20 +22,7 @@ import {
     Card,
     CardHeader,
     CardBody
-} from 'reactstrap'
-
-import React, { useState, useEffect } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUpload } from '@fortawesome/free-solid-svg-icons';
-import GeneralHeader from 'components/Headers/GeneralHeader';
-import { connect, useSelector } from 'react-redux';
-import PropTypes from 'prop-types'
-import { addProduct } from 'redux/actions/productActions';
-import Alert from '../../layouts/Alert';
-import { getProductCategories } from 'redux/actions/categoryActions';
-
-
-//mport axios from "axios";
+} from 'reactstrap';
 
 
 const AddProduct = ({ addProduct, getProductCategories }) => {
@@ -45,14 +43,16 @@ const AddProduct = ({ addProduct, getProductCategories }) => {
         wholesalePrice: '2.99',
         retailPrice: '19.00',
         wholesaler: 'rarissima',
-        description: '',
+        description: 'hello bitch',
         purchaseDate: '2021-08-03',
         quantity: '100',
         warrantyDate: '2021-08-03',
         maxDiscount: '10',
     });
 
-    const [selectedFile, setSelectedFile] = useState();
+    const [image, setImage] = useState('');
+
+    // const [selectedFile, setSelectedFile] = useState();
     const [fileUpload, setFileUpload] = useState({ imageFileURL: '' });
     const [fileUploadName, setFileUploadName] = useState('Upload Image');
 
@@ -62,13 +62,11 @@ const AddProduct = ({ addProduct, getProductCategories }) => {
         wholesalePrice,
         retailPrice,
         wholesaler,
-        image,
         description,
         purchaseDate,
         quantity,
         warrantyDate,
         maxDiscount
-
 
     } = formData;
 
@@ -77,41 +75,55 @@ const AddProduct = ({ addProduct, getProductCategories }) => {
 
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
-    const handleImageChange = e => {
+    // image upload handler
+    const uploadFileHandler = async (e) => {
 
-        setFileUploadName(e.target.files[0].name);
-        setFileUpload({ imageFileURL: URL.createObjectURL(e.target.files[0]) });
-        setFormData({ ...formData, image: e.target.value });
-        setSelectedFile(e.target.files[0]);
+        const file = e.target.files[0];
 
-        console.log(`FILE Contents: ${JSON.stringify(e.target.files[0])}`)
+        const formData = new FormData();
+        formData.append('image', file);
 
+        setFileUploadName(file.name);
+        setFileUpload({ imageFileURL: URL.createObjectURL(file) });
+
+        try {
+            const config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            }
+
+            const { data } = await axios.post('/api/upload', formData, config);
+
+            setImage(data);
+
+
+        } catch (error) {
+            console.error(error);
+
+        }
     }
 
     const onSubmit = async e => {
         e.preventDefault();
 
-        let bodyFormData = new FormData();
+        console.log(`Image Name: ${image}`);
 
-        bodyFormData.append('category', category);
-        bodyFormData.append('name', name);
-        bodyFormData.append('wholesalePrice', wholesalePrice);
-        bodyFormData.append('retailPrice', retailPrice);
-        bodyFormData.append('wholesaler', wholesaler);
-        bodyFormData.append('description', description);
-        bodyFormData.append('purchaseDate', purchaseDate);
-        bodyFormData.append('quantity', quantity);
-        bodyFormData.append('warrantyDate', warrantyDate);
-        bodyFormData.append('maxDiscount', maxDiscount);
-        bodyFormData.append('image', selectedFile);
+        const newProduct = {
+            category,
+            name,
+            wholesalePrice,
+            retailPrice,
+            wholesaler,
+            description,
+            purchaseDate,
+            quantity,
+            warrantyDate,
+            maxDiscount,
+            image
+        }
 
-        // console.log(`Add product: ${JSON.stringify(bodyFormData)}`)
-
-        // for (var pair of bodyFormData.entries()) {
-        //     console.log(pair[0] + ', ' + pair[1]);
-        // }
-
-        addProduct(bodyFormData);
+        addProduct(newProduct);
 
     }
 
@@ -152,7 +164,7 @@ const AddProduct = ({ addProduct, getProductCategories }) => {
                                                     value={category}
                                                     onChange={e => onChange(e)}
                                                 >
-                                                    <option value="" selected disabled hidden>Choose Category</option>
+                                                    <option> </option>
                                                     {
                                                         productCategories && productCategories.map(productCategory => (
                                                             <option>{productCategory.name}</option>
@@ -359,9 +371,9 @@ const AddProduct = ({ addProduct, getProductCategories }) => {
                                                 id="upload"
                                                 type="file"
                                                 className="form-control border-0"
-                                                onChange={e => handleImageChange(e)}
-                                                name="image"
-                                                value={image}
+                                                onChange={uploadFileHandler}
+                                                // name="image"
+                                                // value={image}
                                                 accept="image/*"
                                             />
                                             <Label id="upload-label" for="upload" className="font-weight-light text-muted">{fileUploadName}</Label>

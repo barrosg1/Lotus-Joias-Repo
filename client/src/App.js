@@ -50,16 +50,15 @@ function App() {
             <Router>
                 <Switch>
                     <Route exact path={`${AUTH}/login`} component={AuthLayout} />
-                    <PrivateRoute exact path={`${ADMIN}/user-profile`} component={Profile} />
-                    <PrivateRoute exact path={`${ADMIN}/clients`} component={Clients} />
-                    <PrivateRoute exact path={`${ADMIN}/categories`} component={Categories} />
-                    <PrivateRoute exact path={`${ADMIN}/products`} component={Products} />
-                    <PrivateRoute exact path={`${ADMIN}/add-product`} component={AddProduct} />
-                    <PrivateRoute exact path={`${ADMIN}/add-client`} component={AddClient} />
-                    <PrivateRoute exact path={`${ADMIN}/edit-product/:product_id`} component={EditProduct} />
-                    <PrivateRoute exact path={`${ADMIN}/edit-client/:client_id`} component={EditProduct} />
-                    <PrivateRoute exact path={ADMIN} component={AdminView} />
-
+                    <PrivateRoute path={`${ADMIN}/user-profile`} component={Profile} />
+                    <PrivateRoute path={`${ADMIN}/clients`} component={Clients} />
+                    <PrivateRoute path={`${ADMIN}/categories`} component={Categories} />
+                    <PrivateRoute path={`${ADMIN}/products`} component={Products} />
+                    <PrivateRoute path={`${ADMIN}/add-product`} component={AddProduct} />
+                    <PrivateRoute path={`${ADMIN}/add-client`} component={AddClient} />
+                    <PrivateRoute path={`${ADMIN}/edit-product/:product_id`} component={EditProduct} />
+                    <PrivateRoute path={`${ADMIN}/edit-client/:client_id`} component={EditProduct} />
+                    <PrivateRoute path={ADMIN} component={AdminView} />
 
                     <Redirect from="/" to={ADMIN} />
                 </Switch>
