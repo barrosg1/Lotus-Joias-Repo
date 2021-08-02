@@ -32,13 +32,6 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/icons",
-    name: "Icons",
-    icon: "ni ni-planet text-blue",
-    component: Icons,
-    layout: "/admin",
-  },
-  {
 
     name: "Clients",
     icon: "ni ni-tv-2 text-primary",
@@ -78,7 +71,7 @@ var routes = [
   },
 
   {
-    name: "Manage",
+    name: "Categories",
     icon: "ni ni-bullet-list-67 text-red",
     sub: [{
       path: "/categories",
@@ -96,15 +89,8 @@ var routes = [
     ]
   },
   {
-    path: "/login",
-    name: "Login",
-    icon: "ni ni-key-25 text-info",
-    component: Login,
-    layout: "/auth",
-  },
-  {
     path: "/register",
-    name: "Register",
+    name: "Users",
     icon: "ni ni-circle-08 text-pink",
     component: Register,
     layout: "/auth",

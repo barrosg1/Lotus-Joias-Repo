@@ -5,6 +5,7 @@ import productReducer from './product';
 import profileReducer from './profile';
 import alertReducer from './alert';
 import categoryReducer from './category';
+import transactionReducer from './transaction';
 
 
 export default combineReducers({
@@ -13,5 +14,6 @@ export default combineReducers({
     productReducer,
     profileReducer,
     alertReducer,
-    categoryReducer
+    categoryReducer,
+    transactionReducer
 });

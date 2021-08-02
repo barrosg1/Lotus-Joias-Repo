@@ -184,7 +184,7 @@ const EditProduct = ({ getProduct, editProduct, getProductCategories, deleteProd
     return (
         <>
             <GeneralHeader />
-            <Container fluid>
+            <Container>
                 <Alert />
                 <Row>
                     <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">

@@ -10,42 +10,27 @@ import {
 
     Container,
     Button,
-    Media
 
 } from "reactstrap";
 
 import GeneralHeader from '../../components/Headers/GeneralHeader';
-import { getClients } from '../../redux/actions/clientActions';
+import { getClients, getClient } from '../../redux/actions/clientActions';
 
-const Clients = ({ getClients, clients, loading }) => {
+const Clients = ({ getClients, getClient, clients, loading }) => {
+
+    let history = useHistory();
 
     useEffect(() => {
 
         getClients();
 
-    }, [getClients]);
+    }, [getClients, loading]);
 
-    let history = useHistory();
 
-    const constructedData = () => {
-        const clientList = [];
+    const goToClientPage = (id) => {
 
-        !loading && clients && clients.forEach(client => {
-
-            clientList.push({
-                "First Name": client.firstName,
-                "Last Name": client.lastName,
-                "Email": client.email,
-                "Phone": client.phone,
-                "Address": client.address,
-
-            });
-        });
-
-        return clientList;
+        history.push(`/admin/client-profile/${id}`);
     }
-
-    const goToClientPage = (id) => { history.push(`/admin/edit-client/${id}`); }
 
     const columns = [
 
@@ -93,6 +78,25 @@ const Clients = ({ getClients, clients, loading }) => {
         },
     ]
 
+    const constructedData = () => {
+        const clientList = [];
+
+        !loading && clients && clients.forEach(client => {
+
+            clientList.unshift({
+                "View Client": client._id,
+                "First Name": client.firstName,
+                "Last Name": client.lastName,
+                "Email": client.email,
+                "Phone": client.phone,
+                "Address": client.address,
+
+            });
+        });
+
+        return clientList;
+    }
+
     const options = {
         responsive: 'responsive',
         selectableRows: false,
@@ -120,6 +124,7 @@ const Clients = ({ getClients, clients, loading }) => {
 
 Clients.propTypes = {
     getClients: PropTypes.func.isRequired,
+    getClient: PropTypes.func.isRequired,
     clients: PropTypes.object.isRequired,
     loading: PropTypes.object.isRequired,
 }
@@ -131,7 +136,7 @@ const mapStateToProps = state => ({
 
 });
 
-export default connect(mapStateToProps, { getClients })(Clients);
+export default connect(mapStateToProps, { getClients, getClient })(Clients);
 
 
 

@@ -52,7 +52,6 @@ const ProductCategory = ({ getProductCategories, deleteProductCategory }) => {
     const prodCategoryDelete = (id) => {
         deleteProductCategory(id);
 
-        toggle();
     }
 
     const productColumns = [
@@ -60,24 +59,10 @@ const ProductCategory = ({ getProductCategories, deleteProductCategory }) => {
         {
             name: 'Delete',
             options: {
-                customBodyRender: (productId, tableMeta, updateValue) => {
+                customBodyRender: (productId) => {
                     return (
-                        <>
-                            <Button onClick={toggle} size="sm" className="btn-delete">Delete</Button>
 
-                            <Modal isOpen={modal} toggle={toggle}>
-                                <ModalHeader toggle={toggle}>Are you sure?</ModalHeader>
-                                <ModalBody>
-                                    Are you sure you want to delete this category?
-                                </ModalBody>
-                                <ModalFooter>
-                                    <Button className="btn-delete" onClick={() => prodCategoryDelete(productId)}>Delete</Button>{' '}
-                                    <Button color="secondary" onClick={toggle}>Cancel</Button>
-                                </ModalFooter>
-                            </Modal>
-
-                        </>
-
+                        <Button onClick={() => prodCategoryDelete(productId)} size="sm" className="btn-delete">Delete</Button>
                     );
                 },
                 filter: false

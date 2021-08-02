@@ -35,11 +35,8 @@ const RoleCategory = ({
 
         getRoleCategories();
 
-    }, [getRoleCategories]);
+    }, [getRoleCategories, loading]);
 
-    // modal
-    const [modal, setModal] = useState(false);
-    const toggle = () => setModal(!modal);
 
     // display category data
     const displayRoleCategories = () => {
@@ -58,35 +55,19 @@ const RoleCategory = ({
     }
 
     // delete a category
-    const roleCategoryDelete = (id) => {
-        deleteRoleCategory(id);
+    const roleCategoryDelete = (id) => deleteRoleCategory(id);
 
-        toggle();
-    }
 
     const roleColumns = [
 
         {
             name: 'Delete',
             options: {
-                customBodyRender: (categoryId, tableMeta, updateValue) => {
+                customBodyRender: (categoryId) => {
 
                     return (
-                        <>
-                            <Button onClick={toggle} size="sm" className="btn-delete">Delete</Button>
+                        <Button onClick={() => roleCategoryDelete(categoryId)} size="sm" className="btn-delete">Delete</Button>
 
-                            <Modal isOpen={modal} toggle={toggle}>
-                                <ModalHeader toggle={toggle}>Are you sure?</ModalHeader>
-                                <ModalBody>
-                                    Are you sure you want to delete this category?
-                                </ModalBody>
-                                <ModalFooter>
-                                    <Button className="btn-delete" onClick={() => roleCategoryDelete(categoryId)}>Delete</Button>{' '}
-                                    <Button color="secondary" onClick={toggle}>Cancel</Button>
-                                </ModalFooter>
-                            </Modal>
-
-                        </>
                     );
                 },
                 filter: false

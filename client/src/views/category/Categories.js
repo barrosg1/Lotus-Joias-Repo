@@ -119,7 +119,7 @@ const Categories = ({
                             <hr />
 
                             <Row>
-                                <Col sm={4}>
+                                <Col sm={4} className="mb-5">
                                     <RoleCategory />
                                 </Col>
                                 <Col sm={8}>

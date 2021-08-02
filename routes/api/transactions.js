@@ -1,9 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../../middleware/auth');
-
 const Transaction = require('../../models/Transaction');
-const Product = require('../../models/Product');
 const Client = require('../../models/Client');
 
 // @route   POST api/client/transaction/:client_id
@@ -17,22 +15,74 @@ router.post('/:client_id', [
 
         const client = await Client.findOne({ _id: req.params.client_id });
 
+        if (!client) {
+            return res.status(400).json({ msg: 'No client found' });
+        }
+
         const { details, totalAmountPaid, transactionTotal, items } = req.body;
 
-        const transactionFields =
-        {
+        const newTransaction = {
             clientId: req.params.client_id,
             cwnerFirstName: client.firstName,
             ownerLastName: client.lastName,
             details,
             totalAmountPaid,
             transactionTotal,
-            amountDue: transactionTotal - totalAmountPaid,
             items
         };
 
-        const transaction = new Transaction(transactionFields);
+        const transaction = new Transaction(newTransaction);
         await transaction.save();
+
+        res.json(transaction);
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(400).send('Server Error');
+    }
+
+});
+
+
+// @route   PATCH api/client/transaction/:client_id/:transaction_id
+// @desc    Update a transaction item for a client
+// @access  Private
+
+router.patch('/:client_id/:transaction_id', [
+    auth
+], async (req, res) => {
+    try {
+
+        const client = await Client.findOne({ _id: req.params.client_id });
+
+        if (!client) {
+            return res.status(400).json({ msg: 'No client found' });
+        }
+
+        let transaction = await Transaction.findOne({ clientId: client.id });
+
+        if (!transaction) {
+            return res.status(400).json({ msg: 'No transaction found' });
+        }
+
+        const { details, totalAmountPaid, transactionTotal, items } = req.body;
+
+        let transactionFields = {};
+
+        transactionFields.clientId = client.id;
+        transactionFields.cwnerFirstName = client.firstName;
+        transactionFields.ownerLastName = client.lastName;
+
+        if (details) transactionFields.details = details;
+        if (totalAmountPaid) transactionFields.totalAmountPaid = totalAmountPaid;
+        if (transactionTotal) transactionFields.transactionTotal = transactionTotal;
+        if (items) transactionFields.items = items;
+
+        transaction = await Transaction.findOneAndUpdate(
+            { clientId: client.id },
+            { $set: transactionFields },
+            { new: true }
+        );
 
         res.json(transaction);
 

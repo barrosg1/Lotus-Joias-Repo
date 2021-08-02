@@ -31,13 +31,20 @@ const TransactionSchema = new Schema({
     },
     amountDue: {
         type: Number,
-        required: true
+
     },
     items: [TransactionItem],
 
 
 }, {
     timestamps: true
+});
+
+TransactionSchema.pre('save', function (next) {
+
+    this.amountDue = this.transactionTotal - this.totalAmountPaid;
+
+    next();
 });
 
 module.exports = Transaction = mongoose.model('transaction', TransactionSchema);

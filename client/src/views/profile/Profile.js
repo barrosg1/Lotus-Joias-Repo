@@ -96,7 +96,7 @@ const Profile = ({ loadedUser: { user, loading }, loadUser, updateUser, removeAl
       <Container fluid>
         <Alert />
         <Row>
-          <Col xl="4">
+          <Col xl="4" className="mb-3">
             <Card className="card-profile shadow">
               <Row className="justify-content-center pt-5">
                 <Media

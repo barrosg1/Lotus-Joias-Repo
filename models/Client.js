@@ -23,7 +23,8 @@ const ClientSchema = new mongoose.Schema({
         type: String,
     },
     avatar: {
-        type: String
+        type: String,
+
     },
     notes: {
         type: String

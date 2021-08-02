@@ -16,7 +16,7 @@ import { getProducts } from '../../redux/actions/productActions';
 import { useSelector } from "react-redux";
 
 
-const Products = ({ getProducts, history }) => {
+const TransactionTable = ({ getProducts, history }) => {
 
     const products = useSelector(state => state.productReducer.products);
     const loading = useSelector(state => state.productReducer.loading);
@@ -28,7 +28,7 @@ const Products = ({ getProducts, history }) => {
     }, [getProducts, loading]);
 
 
-    const gotToProductPage = (id) => { history.push(`/admin/edit-product/${id}`); }
+    const goToTransactionPage = (id) => { history.push(`/admin/edit-product/${id}`); }
 
     const columns = [
         {
@@ -37,30 +37,14 @@ const Products = ({ getProducts, history }) => {
                 customBodyRender: (value) => {
 
                     return (
-                        <Button onClick={() => gotToProductPage(value)} color="secondary" className>View</Button>
+                        <Button onClick={() => goToTransactionPage(value)} color="secondary" className>View</Button>
                     );
                 },
                 filter: false
             }
 
         },
-        {
-            name: 'Product Image',
-            options: {
-                customBodyRender: (value) => {
 
-                    return (
-                        <Media
-                            className="product-image-table"
-                            src={!value ? require('../../assets/img/random/blank-image.png').default : `http://localhost:5000${value}`}
-                            alt="..."
-                        />
-                    );
-                },
-                filter: false
-            }
-
-        },
         {
             name: 'Category',
             options: {
@@ -73,28 +57,7 @@ const Products = ({ getProducts, history }) => {
                 filter: false
             }
         },
-        {
-            name: 'Wholesale Price',
-            options: {
-                filter: false
-            }
-        },
-        {
-            name: 'Retail Price',
-            options: {
-                filter: false
-            }
-        },
-        {
-            name: 'Bought From',
 
-        },
-        {
-            name: 'Description',
-            options: {
-                filter: false
-            }
-        }
     ];
 
     const constructedData = () => {
@@ -144,7 +107,7 @@ const Products = ({ getProducts, history }) => {
 
 }
 
-Products.propTypes = {
+TransactionTable.propTypes = {
     getProducts: PropTypes.func.isRequired,
     getProductById: PropTypes.func.isRequired,
 }
@@ -156,7 +119,7 @@ const mapStateToProps = state => ({
 });
 
 
-export default connect(mapStateToProps, { getProducts })(Products);
+export default connect(mapStateToProps, { getProducts })(TransactionTable);
 
 
 

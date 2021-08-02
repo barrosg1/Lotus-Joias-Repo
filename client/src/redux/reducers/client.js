@@ -3,6 +3,10 @@ import {
     CREATE_CLIENT_FAIL,
     GET_CLIENTS_SUCCESS,
     GET_CLIENTS_FAIL,
+    GET_CLIENT_SUCCESS,
+    GET_CLIENT_FAIL,
+    UPDATE_CLIENT_SUCCESS,
+    UPDATE_CLIENT_FAIL
 } from '../types/types'
 
 const initialState = {
@@ -44,6 +48,33 @@ const clientReducer = (state = initialState, action) => {
                 errors
             }
 
+        case GET_CLIENT_SUCCESS:
+            return {
+                ...state,
+                client: payload,
+                loading: false
+            }
+        case GET_CLIENT_FAIL:
+            return {
+                ...state,
+                client: null,
+                loading: false,
+                errors
+            }
+
+        case UPDATE_CLIENT_SUCCESS:
+            return {
+                ...state,
+                client: payload,
+                loading: true
+            }
+        case UPDATE_CLIENT_FAIL:
+            return {
+                ...state,
+                client: null,
+                loading: false,
+                errors
+            }
         default:
             return state;
     }

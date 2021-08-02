@@ -1,12 +1,9 @@
 const express = require('express');
-const multer = require('multer');
 const router = express.Router();
 const auth = require('../../middleware/auth');
 const { check, validationResult } = require('express-validator');
 
 const Product = require('../../models/Product');
-const upload = require('../../utils/fileUploadMiddleware');
-
 
 // @route   POST api/product
 // @desc    Create or update product
@@ -14,7 +11,6 @@ const upload = require('../../utils/fileUploadMiddleware');
 
 router.post('/', [
     auth,
-    upload.single('image'),
     check('category', 'Category is required').not().isEmpty(),
     check('name', 'Product name is required').not().isEmpty(),
     check('wholesalePrice', 'Wholesale price is required').not().isEmpty(),
@@ -24,6 +20,7 @@ router.post('/', [
     check('quantity', 'Quantity is required').not().isEmpty(),
     check('warrantyDate', 'Warranty date is required').not().isEmpty(),
     check('maxDiscount', 'Maximum discount is required').not().isEmpty(),
+    check('image', 'Product image is required').not().isEmpty(),
 
 ], async (req, res) => {
 
@@ -125,9 +122,7 @@ router.get('/:product_id', auth, async (req, res) => {
 // @access  Private
 router.patch('/:product_id', [
     auth,
-    upload.single('image')
 ], async (req, res) => {
-
 
     try {
 
@@ -180,6 +175,11 @@ router.delete('/:product_id', auth, async (req, res) => {
         res.status(500).send('Server Error');
     }
 });
+
+
+// @route   DELETE api/product
+// @desc    Delete all products
+// @access  Private
 
 router.delete('/', auth, async (req, res) => {
     try {

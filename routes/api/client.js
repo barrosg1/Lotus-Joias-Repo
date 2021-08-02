@@ -3,6 +3,7 @@ const router = express.Router();
 const auth = require('../../middleware/auth');
 const gravatar = require('gravatar');
 const { check, validationResult } = require('express-validator');
+const isEmpty = require('../../utils/isEmpty');
 
 const Client = require('../../models/Client.js');
 
@@ -31,7 +32,59 @@ router.post('/', [
         }
 
         const { firstName, lastName, email, phone, address, notes } = req.body;
+
         let avatar = '';
+
+        if (isEmpty(email)) {
+            avatar = gravatar.url('ksad000adas@gmail.com', {
+                s: '200',
+                r: 'pg',
+                d: 'mm'
+            });
+
+        } else {
+            avatar = gravatar.url(email, {
+                s: '200',
+                r: 'pg',
+                d: 'mm'
+            });
+
+        }
+
+        const newClient = {
+            firstName,
+            lastName,
+            email,
+            phone,
+            address,
+            notes,
+            avatar
+        }
+
+        const client = new Client(newClient);
+        await client.save();
+
+        res.json(client);
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(400).send('Server Error');
+    }
+
+});
+
+// @route   PATCH api/client
+// @desc    Update client
+// @access  Private
+
+router.patch('/:client_id', [
+    auth,
+
+], async (req, res) => {
+
+    try {
+
+        const { firstName, lastName, email, phone, address, notes } = req.body;
 
         let clientFields = {};
 
@@ -41,21 +94,37 @@ router.post('/', [
         if (address) clientFields.address = address;
         if (notes) clientFields.notes = notes;
 
-        if (email) {
+        let avatar = '';
 
-            // get users gravatar
-            avatar = gravatar.url(email, {
+        if (isEmpty(email)) {
+            avatar = gravatar.url('ksad000adas@gmail.com', {
                 s: '200',
                 r: 'pg',
                 d: 'mm'
             });
 
+        } else {
+
             clientFields.email = email;
-            clientFields.avatar = avatar;
+
+            avatar = gravatar.url(email, {
+                s: '200',
+                r: 'pg',
+                d: 'mm'
+            });
         }
 
-        const client = new Client(clientFields);
-        await client.save();
+        clientFields.avatar = avatar;
+
+        const client = await Client.findOneAndUpdate(
+            { _id: req.params.client_id },
+            { $set: clientFields },
+            { new: true },
+        );
+
+        if (!client) {
+            return res.status(400).json({ msg: 'Client not found' });
+        }
 
         res.json(client);
 
@@ -112,7 +181,7 @@ router.get('/:client_id', auth, async (req, res) => {
 });
 
 // @route   DELETE api/client/:client_id
-// @desc    Delete client by id
+// @desc    Delete client by id + transactions
 // @access  Private
 
 router.delete('/:client_id', auth, async (req, res) => {
@@ -122,6 +191,24 @@ router.delete('/:client_id', auth, async (req, res) => {
         await Transaction.deleteMany({ clientId: req.params.client_id });
 
         res.send('Client Deleted');
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+// @route   DELETE api/client
+// @desc    Delete all clients + transactions
+// @access  Private
+
+router.delete('/', auth, async (req, res) => {
+    try {
+
+        await Client.remove();
+        await Transaction.remove();
+
+        res.send('All clients deleted');
 
     } catch (err) {
         console.error(err.message);
