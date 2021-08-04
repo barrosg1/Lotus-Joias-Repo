@@ -1,36 +1,10 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.2.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-/*eslint-disable*/
-
-
 // reactstrap components
 import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
   Collapse,
   DropdownMenu,
   DropdownItem,
   UncontrolledDropdown,
   DropdownToggle,
-  FormGroup,
   Form,
   Input,
   InputGroupAddon,
@@ -49,13 +23,13 @@ import {
 
 import { useState } from "react";
 import { NavLink as NavLinkRRD, Link } from "react-router-dom";
-import { PropTypes } from "prop-types";
-import { connect } from "react-redux";
-
 import routes from '../../routes';
+import { useSelector } from 'react-redux';
 
 
-const Sidebar = ({ user }) => {
+const Sidebar = () => {
+
+  const currentUser = useSelector(state => state.authReducer.currentUser);
 
   const [collapse, setCollapse] = useState([]);
   const [collapseOpen, setCollapseOpen] = useState();
@@ -81,6 +55,12 @@ const Sidebar = ({ user }) => {
   // creates the links that appear in the left menu / Sidebar
   const createLinks = (routes) => {
     return routes.map((prop, index) => {
+
+      if (currentUser.role === 'Associate' && prop.name === 'Users') {
+
+        return null;
+      }
+
       return (
         prop.sub ? (
           <NavItem key={index} onClick={() => toggleSidebarItems(index)}>
@@ -197,7 +177,7 @@ const Sidebar = ({ user }) => {
                 <span className="avatar avatar-sm rounded-circle">
                   <img
                     alt="..."
-                    src={user.avatar}
+                    src={currentUser.avatar}
                   />
                 </span>
               </Media>
@@ -292,13 +272,5 @@ const Sidebar = ({ user }) => {
 };
 
 
-Sidebar.propTypes = {
 
-  user: PropTypes.object,
-};
-
-const mapStateToProps = state => ({
-  user: state.authReducer.user
-});
-
-export default connect(mapStateToProps)(Sidebar);
+export default Sidebar;

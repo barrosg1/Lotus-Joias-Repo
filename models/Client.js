@@ -24,6 +24,7 @@ const ClientSchema = new mongoose.Schema({
     },
     avatar: {
         type: String,
+        default: 'https://cdn1.vectorstock.com/i/1000x1000/31/95/user-sign-icon-person-symbol-human-avatar-vector-12693195.jpg'
 
     },
     notes: {

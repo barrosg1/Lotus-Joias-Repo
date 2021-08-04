@@ -1,6 +1,6 @@
 import MUIDataTable from "mui-datatables";
 import React, { useEffect } from 'react';
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import PropTypes from 'prop-types'
 
@@ -14,9 +14,11 @@ import {
 } from "reactstrap";
 
 import GeneralHeader from '../../components/Headers/GeneralHeader';
-import { getClients, getClient } from '../../redux/actions/clientActions';
+import { getClients } from '../../redux/actions/clientActions';
 
-const Clients = ({ getClients, getClient, clients, loading }) => {
+const Clients = ({ getClients }) => {
+
+    const { clients, loading } = useSelector(state => state.clientReducer);
 
     let history = useHistory();
 
@@ -129,14 +131,7 @@ Clients.propTypes = {
     loading: PropTypes.object.isRequired,
 }
 
-const mapStateToProps = state => ({
-
-    clients: state.clientReducer.clients,
-    loading: state.clientReducer.loading
-
-});
-
-export default connect(mapStateToProps, { getClients, getClient })(Clients);
+export default connect(null, { getClients })(Clients);
 
 
 

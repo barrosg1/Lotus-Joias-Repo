@@ -18,11 +18,13 @@ import {
 
 
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import PropTypes from 'prop-types';
 import { logout } from "redux/actions/authActions";
 
-const AdminNavbar = ({ user, logout }) => {
+const AdminNavbar = ({ logout }) => {
+
+  const currentUser = useSelector(state => state.authReducer.currentUser);
 
   return (
 
@@ -53,12 +55,12 @@ const AdminNavbar = ({ user, logout }) => {
                 <span className="avatar avatar-sm rounded-circle">
                   <img
                     alt="..."
-                    src={user.avatar}
+                    src={currentUser.avatar}
                   />
                 </span>
                 <Media className="ml-2 d-none d-lg-block">
                   <span className="mb-0 text-sm font-weight-bold">
-                    {user.firstName} {user.lastName}
+                    {currentUser.firstName} {currentUser.lastName}
                   </span>
                 </Media>
               </Media>
@@ -102,8 +104,5 @@ AdminNavbar.propTypes = {
   user: PropTypes.object,
 };
 
-const mapStateToProps = state => ({
-  user: state.authReducer.user
-});
 
-export default connect(mapStateToProps, { logout })(AdminNavbar);
+export default connect(null, { logout })(AdminNavbar);

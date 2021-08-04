@@ -31,6 +31,7 @@ import AddClient from './views/client/AddClient';
 import { Provider } from 'react-redux';
 import { loadUser } from './redux/actions/authActions';
 import ClientProfile from './views/client/ClientProfile';
+import Users from './views/users/Users';
 
 
 
@@ -59,6 +60,7 @@ function App() {
                     <PrivateRoute path={`${ADMIN}/add-client`} component={AddClient} />
                     <PrivateRoute path={`${ADMIN}/edit-product/:product_id`} component={EditProduct} />
                     <PrivateRoute path={`${ADMIN}/client-profile/:client_id`} component={ClientProfile} />
+                    <PrivateRoute path={`${ADMIN}/add-user`} component={Users} />
                     <PrivateRoute path={ADMIN} component={AdminView} />
 
                     <Redirect from="/" to={ADMIN} />

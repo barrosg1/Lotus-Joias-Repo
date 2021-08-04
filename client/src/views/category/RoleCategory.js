@@ -1,17 +1,10 @@
 import MUIDataTable from "mui-datatables";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { connect, useSelector } from "react-redux";
 import PropTypes from 'prop-types';
 
 // reactstrap components
-import {
-    Button,
-    Modal,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-
-} from "reactstrap";
+import { Button } from "reactstrap";
 
 import {
     getRoleCategories,
@@ -27,7 +20,7 @@ const RoleCategory = ({
 }) => {
 
     // from state
-    const user = useSelector(state => state.authReducer.user);
+    const currentUser = useSelector(state => state.authReducer.currentUser);
     const categories = useSelector(state => state.categoryReducer.categories);
     const loading = useSelector(state => state.categoryReducer.loading);
 
@@ -95,7 +88,7 @@ const RoleCategory = ({
         <>
 
             {
-                !loading && user.role === 'Super Admin' && (
+                !loading && currentUser.role === 'Super Admin' && (
                     <MUIDataTable
                         title={"Role Categories"}
                         data={displayRoleCategories()}

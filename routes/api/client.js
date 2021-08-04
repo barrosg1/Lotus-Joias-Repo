@@ -35,14 +35,7 @@ router.post('/', [
 
         let avatar = '';
 
-        if (isEmpty(email)) {
-            avatar = gravatar.url('ksad000adas@gmail.com', {
-                s: '200',
-                r: 'pg',
-                d: 'mm'
-            });
-
-        } else {
+        if (!isEmpty(email)) {
             avatar = gravatar.url(email, {
                 s: '200',
                 r: 'pg',

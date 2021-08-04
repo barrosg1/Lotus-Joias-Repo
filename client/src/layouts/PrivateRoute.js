@@ -1,8 +1,7 @@
 import React, { Fragment } from "react";
 import { Route, Redirect } from "react-router-dom";
 import { Container, Spinner } from "reactstrap";
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
 import Sidebar from '../components/Sidebar/Sidebar';
 import AdminNavbar from '../components/Navbars/AdminNavbar';
@@ -11,9 +10,10 @@ import AdminFooter from '../components/Footers/AdminFooter';
 
 const PrivateRoute = ({
     component: Component,
-    auth: { isAuthenticated, loading, user },
     ...rest
 }) => {
+
+    const { isAuthenticated, loading, currentUser } = useSelector(state => state.authReducer);
 
     return (
         <Route
@@ -22,7 +22,7 @@ const PrivateRoute = ({
 
                 <Fragment>
                     {
-                        !user ? (<Spinner color="primary" />)
+                        !currentUser ? (<Spinner color="primary" />)
 
                             :
 
@@ -45,12 +45,5 @@ const PrivateRoute = ({
     );
 }
 
-PrivateRoute.propTypes = {
-    auth: PropTypes.object.isRequired
-};
 
-const mapStateToProps = state => ({
-    auth: state.authReducer
-});
-
-export default connect(mapStateToProps)(PrivateRoute);
+export default PrivateRoute;

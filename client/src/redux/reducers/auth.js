@@ -14,7 +14,7 @@ const initialState = {
     token: localStorage.getItem('token'),
     isAuthenticated: null,
     loading: true,
-    user: null,
+    currentUser: null,
     errors: null
 };
 
@@ -28,7 +28,7 @@ const auth = (state = initialState, action) => {
                 ...state,
                 isAuthenticated: true,
                 loading: false,
-                user: payload
+                currentUser: payload
             }
 
         case REGISTER_SUCCESS:
@@ -51,13 +51,13 @@ const auth = (state = initialState, action) => {
         case USER_UPDATE_SUCCESS:
             return {
                 ...state,
-                user: payload,
+                currentUser: payload,
                 loading: false
             }
         case USER_UPDATE_FAIL:
             return {
                 ...state,
-                user: null,
+                currentUser: null,
                 loading: false,
                 errors
             }
@@ -66,7 +66,7 @@ const auth = (state = initialState, action) => {
         case AUTH_ERROR:
         case LOGOUT:
             localStorage.removeItem('token');
-            localStorage.removeItem('user');
+            localStorage.removeItem('currentUser');
             localStorage.removeItem('products');
             return {
                 ...state,

@@ -105,7 +105,7 @@ const ClientProfile = ({ getClient, editClient, match, history }) => {
                                             <Media
                                                 alt="..."
                                                 className="rounded-circle"
-                                                src={client.avatar ? client.avatar : require('../../assets/img/random/avatar-default.png')}
+                                                src={client.avatar}
                                             />
                                         </Row>
 
@@ -143,7 +143,7 @@ const ClientProfile = ({ getClient, editClient, match, history }) => {
                                                     </Button>
                                                 </div>
 
-                                                <Modal isOpen={modal} toggle={toggle}>
+                                                <Modal isOpen={modal} toggle={toggle} className="modal-client">
                                                     <ModalHeader toggle={toggle} />
                                                     <Col sm="12">
                                                         <Card className="bg-secondary shadow">

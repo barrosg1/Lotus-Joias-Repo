@@ -4,14 +4,7 @@ import { connect, useSelector } from "react-redux";
 import PropTypes from 'prop-types';
 
 // reactstrap components
-import {
-    Button,
-    Modal,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-
-} from "reactstrap";
+import { Button } from "reactstrap";
 
 import { getProductCategories, deleteProductCategory } from '../../redux/actions/categoryActions';
 

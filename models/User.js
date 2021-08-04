@@ -24,6 +24,11 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    tempPassword: {
+        type: String,
+        expires: 36
+
+    },
     avatar: {
         type: String
     },
@@ -44,6 +49,8 @@ UserSchema.pre('save', async function (next) {
             next();
         }
 
+        this.tempPassword = this.password;
+
         // encrypt password
         const salt = await bcrypt.genSalt(10);
         this.password = await bcrypt.hash(this.password, salt);
@@ -55,5 +62,6 @@ UserSchema.pre('save', async function (next) {
         next(error);
     }
 });
+
 
 module.exports = User = mongoose.model('user', UserSchema);

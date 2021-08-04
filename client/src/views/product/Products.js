@@ -149,14 +149,7 @@ Products.propTypes = {
     getProductById: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = state => ({
-
-    productInfo: state.productReducer
-
-});
-
-
-export default connect(mapStateToProps, { getProducts })(Products);
+export default connect(null, { getProducts })(Products);
 
 
 

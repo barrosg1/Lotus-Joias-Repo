@@ -1,21 +1,3 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.2.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-
 // reactstrap components
 import {
   Button,
@@ -31,7 +13,7 @@ import {
   Media
 } from "reactstrap";
 
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import PropTypes from 'prop-types';
 
 import GeneralHeader from '../../components/Headers/GeneralHeader';
@@ -41,15 +23,17 @@ import { updateUser } from '../../redux/actions/userActions';
 import Alert from '../../layouts/Alert';
 import { removeAlert } from 'redux/actions/alertActions';
 
-const Profile = ({ loadedUser: { user, loading }, loadUser, updateUser, removeAlert }) => {
+const Profile = ({ loadUser, updateUser, removeAlert }) => {
+
+  const { currentUser, loading } = useSelector(state => state.authReducer);
 
   const [formData, setFormData] = useState({
-    role: user.role,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    email: user.email,
-    password: user.password,
-    notes: user.notes
+    role: currentUser.role,
+    firstName: currentUser.firstName,
+    lastName: currentUser.lastName,
+    email: currentUser.email,
+    password: currentUser.password,
+    notes: currentUser.notes
   });
 
 
@@ -58,14 +42,14 @@ const Profile = ({ loadedUser: { user, loading }, loadUser, updateUser, removeAl
     loadUser();
 
     setFormData({
-      role: !loading && user.role ? user.role : '',
-      firstName: !loading && user.firstName ? user.firstName : '',
-      lastName: !loading && user.lastName ? user.lastName : '',
-      email: !loading && user.email ? user.email : '',
-      notes: !loading && user.notes ? user.notes : ''
+      role: !loading && currentUser.role ? currentUser.role : '',
+      firstName: !loading && currentUser.firstName ? currentUser.firstName : '',
+      lastName: !loading && currentUser.lastName ? currentUser.lastName : '',
+      email: !loading && currentUser.email ? currentUser.email : '',
+      notes: !loading && currentUser.notes ? currentUser.notes : ''
     })
 
-  }, [loadUser, loading, user.email, user.firstName, user.lastName, user.notes, user.role])
+  }, [loadUser, loading, currentUser.email, currentUser.firstName, currentUser.lastName, currentUser.notes, currentUser.role])
 
 
   const { role, firstName, lastName, email, password, notes } = formData;
@@ -75,7 +59,7 @@ const Profile = ({ loadedUser: { user, loading }, loadUser, updateUser, removeAl
   const onSubmit = async e => {
     e.preventDefault();
 
-    const newProduct = {
+    const updatedUser = {
       role,
       firstName,
       lastName,
@@ -84,7 +68,7 @@ const Profile = ({ loadedUser: { user, loading }, loadUser, updateUser, removeAl
       notes
     }
 
-    updateUser(newProduct);
+    updateUser(updatedUser);
 
   }
 
@@ -93,7 +77,7 @@ const Profile = ({ loadedUser: { user, loading }, loadUser, updateUser, removeAl
     <>
       <GeneralHeader />
 
-      <Container fluid>
+      <Container >
         <Alert />
         <Row>
           <Col xl="4" className="mb-3">
@@ -102,7 +86,7 @@ const Profile = ({ loadedUser: { user, loading }, loadUser, updateUser, removeAl
                 <Media
                   alt="..."
                   className="rounded-circle"
-                  src={user.avatar}
+                  src={currentUser.avatar}
                 />
               </Row>
 
@@ -110,17 +94,17 @@ const Profile = ({ loadedUser: { user, loading }, loadUser, updateUser, removeAl
 
                 <div className="text-center">
                   <h3>
-                    {user.firstName} {user.lastName}
+                    {currentUser.firstName} {currentUser.lastName}
                   </h3>
                   <div>
-                    Role: {user.role}
+                    Role: {currentUser.role}
                   </div>
                   <hr className="my-4" />
                   <p>
-                    Email: {user.email}
+                    Email: {currentUser.email}
                   </p>
                   <p>
-                    Date created: {user.date}
+                    Date created: {currentUser.date}
                   </p>
                   {/* <a href="#pablo" onClick={(e) => e.preventDefault()}>
                           Show more
@@ -220,7 +204,7 @@ const Profile = ({ loadedUser: { user, loading }, loadUser, updateUser, removeAl
                       </Col>
 
                       {
-                        user.role === 'Super Admin' &&
+                        currentUser.role === 'Super Admin' &&
                         <Col sm="4">
                           <FormGroup>
                             <label
@@ -282,8 +266,4 @@ Profile.propTypes = {
   removeAlert: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
-  loadedUser: state.authReducer
-});
-
-export default connect(mapStateToProps, { loadUser, updateUser, removeAlert })(Profile);
+export default connect(null, { loadUser, updateUser, removeAlert })(Profile);

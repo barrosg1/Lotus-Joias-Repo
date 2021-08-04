@@ -286,8 +286,8 @@ const EditProduct = ({ getProduct, editProduct, getProductCategories, deleteProd
                                                         onChange={e => onChange(e)}
                                                     >
                                                         {
-                                                            productCategories.map(productCategory => (
-                                                                <option>{productCategory.name}</option>
+                                                            productCategories.map((productCategory, key) => (
+                                                                <option key={key}>{productCategory.name}</option>
                                                             ))
                                                         }
                                                     </Input>
@@ -452,7 +452,6 @@ const EditProduct = ({ getProduct, editProduct, getProductCategories, deleteProd
 }
 
 EditProduct.propTypes = {
-
     getProduct: PropTypes.func.isRequired,
     editProduct: PropTypes.func.isRequired,
     deleteProduct: PropTypes.func.isRequired,
@@ -460,7 +459,8 @@ EditProduct.propTypes = {
 }
 
 export default connect(null, {
-    getProduct, editProduct,
+    getProduct,
+    editProduct,
     deleteProduct,
     getProductCategories
 })(EditProduct);

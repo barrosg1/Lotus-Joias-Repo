@@ -1,21 +1,3 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.2.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-
 // reactstrap components
 import {
   Button,
@@ -28,13 +10,13 @@ import {
   InputGroupAddon,
   InputGroupText,
   InputGroup,
-  Row,
   Col,
-  Media
+  Media,
+  Label
 } from "reactstrap";
 
 import React, { useState } from 'react';
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types'
 import { login } from '../../redux/actions/authActions';
@@ -42,12 +24,16 @@ import { login } from '../../redux/actions/authActions';
 import Alert from '../../layouts/Alert';
 
 
-const Login = ({ login, isAuthenticated }) => {
+const Login = ({ login }) => {
+
+  const isAuthenticated = useSelector(state => state.authReducer.isAuthenticated);
 
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
+
+  const [showPassword, setShowPassword] = useState('password');
 
   const { email, password } = formData;
 
@@ -63,6 +49,16 @@ const Login = ({ login, isAuthenticated }) => {
   // redirect if logged in
   if (isAuthenticated) {
     return <Redirect to='/admin' />
+  }
+
+  const togglePassword = () => {
+    if (showPassword === 'password') {
+
+      setShowPassword('text');
+
+    } else {
+      setShowPassword('password');
+    }
   }
 
   const imgStyle = {
@@ -113,7 +109,7 @@ const Login = ({ login, isAuthenticated }) => {
                   </InputGroupAddon>
                   <Input
                     placeholder="Password"
-                    type="password"
+                    type={showPassword}
                     autoComplete="new-password"
                     name='password'
                     value={password}
@@ -121,6 +117,9 @@ const Login = ({ login, isAuthenticated }) => {
                   />
                 </InputGroup>
               </FormGroup>
+              <center><Input type="checkbox" onClick={() => togglePassword()} />{' '}
+                Show Password
+              </center>
               <div className="text-center">
                 <Button className="submit-btn" color="primary" type="submit">
                   Sign in
@@ -139,8 +138,4 @@ Login.propTypes = {
   isAuthenticated: PropTypes.bool
 }
 
-const mapStateToProps = state => ({
-  isAuthenticated: state.authReducer.isAuthenticated
-});
-
-export default connect(mapStateToProps, { login })(Login);
+export default connect(null, { login })(Login);

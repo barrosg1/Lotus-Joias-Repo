@@ -30,7 +30,7 @@ export const loadUser = () => async dispatch => {
             payload: res.data
         });
 
-        localStorage.setItem('user', JSON.stringify(res.data));
+        localStorage.setItem('currentUser', JSON.stringify(res.data));
 
     } catch (err) {
 

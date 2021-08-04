@@ -132,7 +132,7 @@ const AddProduct = ({ addProduct, getProductCategories }) => {
             <GeneralHeader />
             <Container>
                 <Alert />
-                <Col xl="12">
+                <Col lg="12">
                     <Card className="bg-secondary shadow">
                         <CardHeader className="bg-white border-0">
                             <Row className="align-items-center">
@@ -166,8 +166,8 @@ const AddProduct = ({ addProduct, getProductCategories }) => {
                                                 >
                                                     <option> </option>
                                                     {
-                                                        productCategories && productCategories.map(productCategory => (
-                                                            <option>{productCategory.name}</option>
+                                                        productCategories && productCategories.map((productCategory, key) => (
+                                                            <option key={key}>{productCategory.name}</option>
                                                         ))
                                                     }
 

@@ -31,7 +31,7 @@ const Categories = ({
 }) => {
 
     // from state
-    const user = useSelector(state => state.authReducer.user);
+    const currentUser = useSelector(state => state.authReducer.currentUser);
 
     // form data
     const [formData, setFormData] = useState({ name: '', table: 'Product' });
@@ -83,7 +83,7 @@ const Categories = ({
 
                                             <option>Products</option>
                                             {
-                                                user.role === 'Super Admin' && <option>Roles</option>
+                                                currentUser.role === 'Super Admin' && <option>Roles</option>
                                             }
 
                                         </Input>
@@ -138,7 +138,7 @@ const Categories = ({
 
 Categories.propTypes = {
     addProductCategory: PropTypes.func.isRequired,
-    loading: PropTypes.object.isRequired,
+
 }
 
 export default connect(null, { addRoleCategory, addProductCategory })(Categories);
