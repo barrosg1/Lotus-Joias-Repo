@@ -127,8 +127,6 @@ router.delete('/', auth, async (req, res) => {
 
 // ======================= Product Category ===========================
 
-
-
 // @route   POST api/category/product
 // @desc    Create product category
 // @access  Private

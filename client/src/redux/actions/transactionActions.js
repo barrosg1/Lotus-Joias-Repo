@@ -50,7 +50,6 @@ export const addTransaction = (data, clientId) => async dispatch => {
     try {
 
         const res = await axios.post(`/api/client/transaction/${clientId}`, data, config);
-        // const clientId = res.data._id;
 
         dispatch({
             type: CREATE_TRANSACTION_SUCCESS,

@@ -6,7 +6,7 @@ const { check, validationResult } = require('express-validator');
 const Product = require('../../models/Product');
 
 // @route   POST api/product
-// @desc    Create or update product
+// @desc    Create product
 // @access  Private
 
 router.post('/', [
