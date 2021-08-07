@@ -60,17 +60,21 @@ const WholeSalerSchema = new Schema({
     },
     staff: [
         {
-            name: {
+            staffName: {
                 type: String,
                 trim: true,
             },
-            phone: {
+            staffPhone: {
                 type: Number,
 
             }
 
         }
     ],
+    notes: {
+        type: String,
+
+    },
     date: {
         type: Date,
         default: Date.now

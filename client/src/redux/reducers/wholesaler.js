@@ -5,6 +5,8 @@ import {
     UPDATE_WHOLESALER_FAIL,
     GET_ALL_WHOLESALERS_SUCCESS,
     GET_ALL_WHOLESALERS_FAIL,
+    GET_WHOLESALER_SUCCESS,
+    GET_WHOLESALER_FAIL,
     DELETE_WHOLESALER_SUCCESS,
     DELETE_WHOLESALER_FAIL
 } from '../types/types'
@@ -13,7 +15,7 @@ const initialState = {
     wholesalers: [],
     wholesaler: {},
     loading: true,
-    errors: null
+    errors: null,
 
 };
 
@@ -36,11 +38,26 @@ const wholesalerReducer = (state = initialState, action) => {
                 loading: false,
                 errors
             }
+        case UPDATE_WHOLESALER_SUCCESS:
+            return {
+                ...state,
+                wholesaler: payload,
+                loading: false,
+            }
+
+        case UPDATE_WHOLESALER_FAIL:
+            return {
+                ...state,
+                wholesaler: null,
+                loading: false,
+                errors
+            }
         case CREATE_WHOLESALER_SUCCESS:
             return {
                 ...state,
                 wholesaler: payload,
                 loading: true,
+                tab: 1
             }
         case CREATE_WHOLESALER_FAIL:
             return {
@@ -50,14 +67,14 @@ const wholesalerReducer = (state = initialState, action) => {
                 errors
             }
 
-        case UPDATE_WHOLESALER_SUCCESS:
+        case GET_WHOLESALER_SUCCESS:
             return {
                 ...state,
                 wholesaler: payload,
-                loading: true,
+                loading: false,
             }
 
-        case UPDATE_WHOLESALER_FAIL:
+        case GET_WHOLESALER_FAIL:
             return {
                 ...state,
                 wholesaler: null,

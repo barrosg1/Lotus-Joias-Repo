@@ -64,7 +64,7 @@ const routes = [
     layout: "/admin",
   },
   {
-    path: "/wholesalers",
+    path: "/wholesaler",
     name: "Fornecedores",
     icon: "ni ni-tv-2 text-primary",
     layout: "/admin",

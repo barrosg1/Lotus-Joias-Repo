@@ -41,7 +41,7 @@ const Clients = ({ getClients }) => {
             options: {
                 customBodyRender: (value, tableMeta, updateValue) => {
                     return (
-                        <Button onClick={() => goToClientPage(value)} color="secondary" className>View</Button>
+                        <Button onClick={() => goToClientPage(value)} color="secondary">View</Button>
                     );
                 },
                 filter: false

@@ -7,6 +7,8 @@ import profileReducer from './profile';
 import alertReducer from './alert';
 import categoryReducer from './category';
 import transactionReducer from './transaction';
+import wholesalerReducer from './wholesaler';
+
 
 export default combineReducers({
     authReducer,
@@ -16,5 +18,6 @@ export default combineReducers({
     profileReducer,
     alertReducer,
     categoryReducer,
-    transactionReducer
+    transactionReducer,
+    wholesalerReducer
 });

@@ -9,6 +9,8 @@ import {
     UPDATE_WHOLESALER_FAIL,
     GET_ALL_WHOLESALERS_SUCCESS,
     GET_ALL_WHOLESALERS_FAIL,
+    GET_WHOLESALER_SUCCESS,
+    GET_WHOLESALER_FAIL,
     DELETE_WHOLESALER_SUCCESS,
     DELETE_WHOLESALER_FAIL
 } from "../types/types";
@@ -20,7 +22,7 @@ export const getWholesalers = () => async dispatch => {
 
     try {
 
-        const res = await axios.get('/api/client');
+        const res = await axios.get('/api/wholesaler');
 
         dispatch({
             type: GET_ALL_WHOLESALERS_SUCCESS,
@@ -28,9 +30,42 @@ export const getWholesalers = () => async dispatch => {
         });
 
     } catch (err) {
+
+        const errors = err.response.data.errors;
+
+        if (err.response.data.errors) console.log(JSON.stringify(errors));
+
         dispatch({
-            type: GET_ALL_WHOLESALERS_FAIL
-        })
+            type: GET_ALL_WHOLESALERS_FAIL,
+            errors: err.response
+        });
+
+    }
+};
+
+// =========== Get wholesaler by ID  =============
+
+export const getWholesaler = (wholesalerId) => async dispatch => {
+
+    try {
+
+        const res = await axios.patch(`/api/wholesaler/${wholesalerId}`);
+
+        dispatch({
+            type: GET_WHOLESALER_SUCCESS,
+            payload: res.data
+        });
+
+    } catch (err) {
+
+        const errors = err.response.data.errors;
+
+        if (err.response.data.errors) console.log(JSON.stringify(errors));
+
+        dispatch({
+            type: GET_WHOLESALER_FAIL,
+            errors: err.response
+        });
     }
 };
 
@@ -44,19 +79,16 @@ export const addWholesaler = (data) => async dispatch => {
         }
     }
 
-    const body = JSON.stringify(data);
-
     try {
 
-        const res = await axios.post('/api/wholesaler', body, config);
-        const clientId = res.data._id;
+        const res = await axios.post('/api/wholesaler', data, config);
 
         dispatch({
             type: CREATE_WHOLESALER_SUCCESS,
             payload: res.data
         });
 
-        dispatch(setAlert([{ msg: 'Wholesaler saved' }], 'success', 'Go to client page', `/admin/client-profile/${clientId}`));
+        dispatch(setAlert([{ msg: 'Wholesaler saved' }], 'success'));
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -67,6 +99,9 @@ export const addWholesaler = (data) => async dispatch => {
         if (err.response.data.errors) {
 
             dispatch(setAlert(errors, 'danger'));
+        } else {
+
+            dispatch(setAlert([{ msg: err }], 'danger'));
         }
 
         dispatch({
@@ -92,15 +127,33 @@ export const editWholesaler = (data, wholesalerId) => async dispatch => {
 
         const res = await axios.patch(`/api/wholesaler/${wholesalerId}`, data, config);
 
+        dispatch(setAlert([{ msg: 'Fornecedor foi atualizado' }], 'success'));
+
         dispatch({
             type: UPDATE_WHOLESALER_SUCCESS,
             payload: res.data
         });
 
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
     } catch (err) {
+
+        const errors = err.response.data.errors;
+
+        if (err.response.data.errors) {
+
+            dispatch(setAlert(errors, 'danger'));
+        } else {
+
+            console.log(JSON.stringify(err.response));
+        }
+
         dispatch({
-            type: UPDATE_WHOLESALER_FAIL
+            type: UPDATE_WHOLESALER_FAIL,
+            errors: err.response
         })
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 };
 
@@ -117,7 +170,6 @@ export const deleteWholesaler = (wholesalerId) => async dispatch => {
         });
 
     } catch (err) {
-
 
         const errors = err.response.data.errors;
 

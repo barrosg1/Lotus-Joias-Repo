@@ -79,6 +79,7 @@ const EditProduct = ({ getProduct, editProduct, getProductCategories, deleteProd
         getProduct,
         getProductCategories,
         loading,
+        product.category,
         product.name,
         product.wholesalePrice,
         product.retailPrice,
@@ -87,8 +88,8 @@ const EditProduct = ({ getProduct, editProduct, getProductCategories, deleteProd
         product.purchaseDate,
         product.quantity,
         product.warrantyDate,
-        product.maxDiscount,
-        product.category
+        product.maxDiscount
+
     ]
     );
 

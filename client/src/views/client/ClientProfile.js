@@ -23,6 +23,7 @@ import PropTypes from 'prop-types'
 import Alert from '../../layouts/Alert';
 
 import { getClient, editClient } from '../../redux/actions/clientActions';
+import TransactionTable from 'views/transaction/TransactionTable';
 
 const ClientProfile = ({ getClient, editClient, match, history }) => {
 
@@ -44,10 +45,6 @@ const ClientProfile = ({ getClient, editClient, match, history }) => {
     });
 
     useEffect(() => {
-
-        console.log(`Params client: ${match.params.client_id}`)
-        console.log(`Loading: ${loading}`)
-        console.log(`Client: ${JSON.stringify(client)}`)
 
         getClient(match.params.client_id);
 
@@ -108,7 +105,6 @@ const ClientProfile = ({ getClient, editClient, match, history }) => {
                                                 src={client.avatar}
                                             />
                                         </Row>
-
                                         <CardBody >
 
                                             <div className="text-center">
@@ -124,11 +120,10 @@ const ClientProfile = ({ getClient, editClient, match, history }) => {
                                         </CardBody>
                                     </Card>
                                 </Col>
-                                <Col lg="5">
+                                <Col lg="5" className="mb-3">
                                     <Card className="bg-secondary shadow">
                                         <Alert />
                                         <CardHeader className="bg-white border-0">
-
                                             <Row className="align-items-center">
                                                 <div className="col">
                                                     <h3 className="mb-0">Contact Information</h3>
@@ -358,6 +353,21 @@ const ClientProfile = ({ getClient, editClient, match, history }) => {
                                                 </Col>
                                             </Row>
 
+                                        </CardBody>
+                                    </Card>
+                                </Col>
+
+                                <Col lg="4">
+                                    <Card className="bg-secondary shadow">
+                                        <CardHeader className="bg-white border-0">
+                                            <Row className="align-items-center">
+                                                <div className="col">
+                                                    <h3 className="mb-0">Recent Transactions</h3>
+                                                </div>
+                                            </Row>
+                                        </CardHeader>
+                                        <CardBody>
+                                            <TransactionTable />
                                         </CardBody>
                                     </Card>
                                 </Col>
