@@ -6,14 +6,12 @@ import {
   FormGroup,
   Form,
   Input,
-  Container,
   Row,
   Col,
   Media
 } from "reactstrap";
 
 import { useDispatch, useSelector } from "react-redux";
-import GeneralHeader from '../../components/Headers/GeneralHeader';
 import { useState, useEffect } from 'react';
 import { loadUser } from "redux/actions/authActions";
 import { updateUser } from '../../redux/actions/userActions';

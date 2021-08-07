@@ -1,6 +1,5 @@
 import {
     Button,
-    Container,
     Media,
 } from "reactstrap";
 
@@ -8,9 +7,6 @@ import MUIDataTable from "mui-datatables";
 import React, { useEffect } from 'react';
 import { getProducts } from '../../redux/actions/productActions';
 import { useSelector, useDispatch } from "react-redux";
-
-import GeneralHeader from '../../components/Headers/GeneralHeader';
-
 
 const Products = ({ history }) => {
 

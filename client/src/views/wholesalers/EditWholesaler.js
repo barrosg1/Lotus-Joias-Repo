@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
 import {
-    Container,
     Row,
     Col,
     Form,
@@ -26,9 +25,7 @@ import { isEmpty } from 'utils/isEmpty';
 
 import { editWholesaler, getWholesaler, deleteWholesaler } from '../../redux/actions/wholesalerAction';
 
-
 import Alert from '../../layouts/Alert';
-import GeneralHeader from '../../components/Headers/GeneralHeader';
 
 
 function EditWholesaler({ match, history }) {

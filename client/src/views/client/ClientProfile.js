@@ -1,6 +1,5 @@
 
 import {
-    Container,
     Row,
     Col,
     Form,
@@ -17,7 +16,6 @@ import {
 } from 'reactstrap'
 
 import React, { useState, useEffect } from 'react'
-import GeneralHeader from 'components/Headers/GeneralHeader';
 import { useSelector, useDispatch } from 'react-redux';
 
 import Alert from '../../layouts/Alert';

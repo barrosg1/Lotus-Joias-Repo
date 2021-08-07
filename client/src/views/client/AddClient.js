@@ -12,12 +12,10 @@ import {
 } from 'reactstrap'
 
 import React, { useState } from 'react'
-import GeneralHeader from 'components/Headers/GeneralHeader';
 import { useDispatch } from 'react-redux';
 import Alert from '../../layouts/Alert';
 
 import { addClient } from '../../redux/actions/clientActions';
-import { Container } from '@material-ui/core';
 
 const AddClient = () => {
 

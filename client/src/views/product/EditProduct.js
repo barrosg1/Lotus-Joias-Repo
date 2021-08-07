@@ -1,14 +1,12 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react'
 import { Link } from "react-router-dom";
-import GeneralHeader from 'components/Headers/GeneralHeader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUpload } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import Alert from 'layouts/Alert';
 
 import {
-    Container,
     Row,
     Col,
     Form,

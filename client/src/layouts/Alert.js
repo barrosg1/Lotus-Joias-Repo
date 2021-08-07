@@ -19,29 +19,34 @@ const Alert = ({ history }) => {
     if (!isEmpty(alerts)) {
 
         isAlert = (
-            <>
-                <div className={`alert-style alert alert-${alerts.alertType}`}>
+            <div className={`alert-style alert alert-${alerts.alertType}`}>
+                {
 
-                    {
+                    alerts.msgData && alerts.msgData.map((alert, key) => {
+                        return <p key={key}>{alert.msg}</p>
+                    })
 
-                        alerts.msgData && alerts.msgData.map((alert, key) => {
-                            return <p key={key}>{alert.msg}</p>
-                        })
+                }
 
-                    }
+                {
+                    alerts.alertType === 'success' &&
+                    alerts.redirectPath &&
+                    alerts.redirectValue && (
 
-                    {
-                        alerts.alertType === 'success' &&
-                        alerts.redirectPath &&
-                        alerts.redirectValue && (
+                        <Button
+                            className='alert-btn'
+                            color="primary"
+                            size="sm"
+                            onClick={() => submit(alerts.redirectPath)}
+                        >
+                            {alerts.redirectValue}
+                        </Button>
 
-                            <Button className='alert-btn' color="primary" size="sm" onClick={() => submit(alerts.redirectPath)}>{alerts.redirectValue}</Button>
+                    )
+                }
 
-                        )
-                    }
+            </div>
 
-                </div>
-            </>
         )
     }
 

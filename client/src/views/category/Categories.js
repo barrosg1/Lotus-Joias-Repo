@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 
-import GeneralHeader from '../../components/Headers/GeneralHeader';
-
 // reactstrap components
 import {
-
-    Container,
     Row,
     Col,
     FormGroup,

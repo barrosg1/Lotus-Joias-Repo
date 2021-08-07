@@ -3,14 +3,12 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUpload } from '@fortawesome/free-solid-svg-icons';
-import GeneralHeader from 'components/Headers/GeneralHeader';
 import { useDispatch, useSelector } from 'react-redux';
 import { addProduct } from 'redux/actions/productActions';
 import Alert from '../../layouts/Alert';
 import { getProductCategories } from 'redux/actions/categoryActions';
 
 import {
-    Container,
     Row,
     Col,
     Form,
@@ -41,7 +39,7 @@ const AddProduct = () => {
         wholesalePrice: '2.99',
         retailPrice: '19.00',
         wholesaler: 'rarissima',
-        description: 'hello bitch',
+        description: '',
         purchaseDate: '2021-08-03',
         quantity: '100',
         warrantyDate: '2021-08-03',

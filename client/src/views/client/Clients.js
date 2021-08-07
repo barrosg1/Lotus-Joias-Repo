@@ -3,14 +3,8 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 
 // reactstrap components
-import {
+import { Button } from "reactstrap";
 
-    Container,
-    Button,
-
-} from "reactstrap";
-
-import GeneralHeader from '../../components/Headers/GeneralHeader';
 import { getClients } from '../../redux/actions/clientActions';
 
 const Clients = ({ history }) => {

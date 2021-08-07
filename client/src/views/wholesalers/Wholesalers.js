@@ -1,10 +1,8 @@
 
 
-import React, { useState } from 'react'
-import GeneralHeader from 'components/Headers/GeneralHeader';
-import { Container } from 'reactstrap';
-import Alert from '../../layouts/Alert';
+import React, { useState } from 'react';
 
+import Alert from '../../layouts/Alert';
 import WholesalersTable from './WholesalersTable';
 import AddWholesalerForm from './AddWholesalerForm';
 

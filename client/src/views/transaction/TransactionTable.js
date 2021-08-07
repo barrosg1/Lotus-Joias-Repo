@@ -1,18 +1,14 @@
 import {
-
-    Button,
     Collapse,
     Card,
     CardBody
 
 } from "reactstrap";
 
-import MUIDataTable from "mui-datatables";
-import React, { useEffect, useState } from 'react';
+
+import React, { useState } from 'react';
 import { connect } from "react-redux";
 import PropTypes from 'prop-types'
-
-import GeneralHeader from '../../components/Headers/GeneralHeader';
 
 import { useSelector } from "react-redux";
 import { getTransactions } from '../../redux/actions/transactionActions';

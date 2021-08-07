@@ -1,6 +1,4 @@
 import {
-
-    Container,
     Row,
     Col,
     Form,
@@ -16,7 +14,6 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import generator from 'generate-password';
-import GeneralHeader from '../../components/Headers/GeneralHeader';
 import Alert from '../../layouts/Alert';
 import UsersTable from './UsersTable';
 import { getRoleCategories } from '../../redux/actions/categoryActions';
