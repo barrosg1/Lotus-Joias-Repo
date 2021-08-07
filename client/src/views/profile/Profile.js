@@ -1,4 +1,3 @@
-// reactstrap components
 import {
   Button,
   Card,
@@ -13,17 +12,16 @@ import {
   Media
 } from "reactstrap";
 
-import { connect, useSelector } from "react-redux";
-import PropTypes from 'prop-types';
-
+import { useDispatch, useSelector } from "react-redux";
 import GeneralHeader from '../../components/Headers/GeneralHeader';
 import { useState, useEffect } from 'react';
 import { loadUser } from "redux/actions/authActions";
 import { updateUser } from '../../redux/actions/userActions';
 import Alert from '../../layouts/Alert';
-import { removeAlert } from 'redux/actions/alertActions';
 
-const Profile = ({ loadUser, updateUser, removeAlert }) => {
+const Profile = () => {
+
+  const dispatch = useDispatch();
 
   const { currentUser, loading } = useSelector(state => state.authReducer);
 
@@ -39,7 +37,7 @@ const Profile = ({ loadUser, updateUser, removeAlert }) => {
 
   useEffect(() => {
 
-    loadUser();
+    dispatch(loadUser());
 
     setFormData({
       role: !loading && currentUser.role ? currentUser.role : '',
@@ -49,7 +47,15 @@ const Profile = ({ loadUser, updateUser, removeAlert }) => {
       notes: !loading && currentUser.notes ? currentUser.notes : ''
     })
 
-  }, [loadUser, loading, currentUser.email, currentUser.firstName, currentUser.lastName, currentUser.notes, currentUser.role])
+  }, [
+    dispatch,
+    loading,
+    currentUser.email,
+    currentUser.firstName,
+    currentUser.lastName,
+    currentUser.notes,
+    currentUser.role
+  ]);
 
 
   const { role, firstName, lastName, email, password, notes } = formData;
@@ -68,202 +74,189 @@ const Profile = ({ loadUser, updateUser, removeAlert }) => {
       notes
     }
 
-    updateUser(updatedUser);
+    dispatch(updateUser(updatedUser));
 
   }
 
   return (
-
     <>
-      <GeneralHeader />
+      <Alert />
+      <Row>
+        <Col xl="4" className="mb-3">
+          <Card className="card-profile shadow">
+            <Row className="justify-content-center pt-5">
+              <Media
+                alt="..."
+                className="rounded-circle"
+                src={currentUser.avatar}
+              />
+            </Row>
 
-      <Container >
-        <Alert />
-        <Row>
-          <Col xl="4" className="mb-3">
-            <Card className="card-profile shadow">
-              <Row className="justify-content-center pt-5">
-                <Media
-                  alt="..."
-                  className="rounded-circle"
-                  src={currentUser.avatar}
-                />
-              </Row>
+            <CardBody >
 
-              <CardBody >
-
-                <div className="text-center">
-                  <h3>
-                    {currentUser.firstName} {currentUser.lastName}
-                  </h3>
-                  <div>
-                    Role: {currentUser.role}
-                  </div>
-                  <hr className="my-4" />
-                  <p>
-                    Email: {currentUser.email}
-                  </p>
-                  <p>
-                    Date created: {currentUser.date}
-                  </p>
-                  {/* <a href="#pablo" onClick={(e) => e.preventDefault()}>
+              <div className="text-center">
+                <h3>
+                  {currentUser.firstName} {currentUser.lastName}
+                </h3>
+                <div>
+                  Role: {currentUser.role}
+                </div>
+                <hr className="my-4" />
+                <p>
+                  Email: {currentUser.email}
+                </p>
+                <p>
+                  Date created: {currentUser.date}
+                </p>
+                {/* <a href="#pablo" onClick={(e) => e.preventDefault()}>
                           Show more
                         </a> */}
+              </div>
+            </CardBody>
+          </Card>
+        </Col>
+        <Col className="order-xl-1" xl="8">
+          <Card className="bg-secondary shadow">
+            <CardHeader className="bg-white border-0">
+              <Row className="align-items-center">
+                <Col xs="8">
+                  <h3 className="mb-0">My account</h3>
+                </Col>
+              </Row>
+            </CardHeader>
+            <CardBody>
+              <Form onSubmit={e => onSubmit(e)}>
+                <h6 className="heading-small text-muted mb-4">
+                  User information
+                </h6>
+                <div className="pl-lg-4">
+
+                  <Row>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-first-name"
+                        >
+                          First name
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          type="text"
+                          name='firstName'
+                          value={firstName}
+                          onChange={e => onChange(e)}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-last-name"
+                        >
+                          Last name
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          type="text"
+                          name='lastName'
+                          value={lastName}
+                          onChange={e => onChange(e)}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-first-name"
+                        >
+                          Email
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          type="email"
+                          name='email'
+                          value={email}
+                          onChange={e => onChange(e)}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-last-name"
+
+                        >
+                          Password
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          type="password"
+                          name='password'
+                          value={password}
+                          onChange={e => onChange(e)}
+                        />
+                      </FormGroup>
+                    </Col>
+
+                    {
+                      currentUser.role === 'Super Admin' &&
+                      <Col sm="4">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-last-name"
+                          >
+                            Change Role
+                          </label>
+                          <Input
+                            type="select"
+                            name="role"
+                            value={role}
+                            onChange={e => onChange(e)}
+                          >
+                            <option>Super Admin</option>
+                            <option>Admin</option>
+                            <option>Associate</option>
+                          </Input>
+                        </FormGroup>
+                      </Col>
+                    }
+
+                  </Row>
                 </div>
-              </CardBody>
-            </Card>
-          </Col>
-          <Col className="order-xl-1" xl="8">
-            <Card className="bg-secondary shadow">
-              <CardHeader className="bg-white border-0">
-                <Row className="align-items-center">
-                  <Col xs="8">
-                    <h3 className="mb-0">My account</h3>
-                  </Col>
-                </Row>
-              </CardHeader>
-              <CardBody>
-                <Form onSubmit={e => onSubmit(e)}>
-                  <h6 className="heading-small text-muted mb-4">
-                    User information
-                  </h6>
-                  <div className="pl-lg-4">
 
-                    <Row>
-                      <Col lg="6">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-first-name"
-                          >
-                            First name
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            type="text"
-                            name='firstName'
-                            value={firstName}
-                            onChange={e => onChange(e)}
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col lg="6">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-last-name"
-                          >
-                            Last name
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            type="text"
-                            name='lastName'
-                            value={lastName}
-                            onChange={e => onChange(e)}
-                          />
-                        </FormGroup>
-                      </Col>
-                    </Row>
+                <hr className="my-4" />
 
-                    <Row>
-                      <Col lg="6">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-first-name"
-                          >
-                            Email
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            type="email"
-                            name='email'
-                            value={email}
-                            onChange={e => onChange(e)}
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col lg="6">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-last-name"
+                <h6 className="heading-small text-muted mb-4">Notes</h6>
+                <div className="pl-lg-4">
+                  <FormGroup>
+                    <label>Notes</label>
+                    <Input
+                      className="form-control-alternative"
+                      rows="4"
+                      type="textarea"
+                      name='notes'
+                      value={notes}
+                      onChange={e => onChange(e)}
+                    />
+                  </FormGroup>
+                </div>
 
-                          >
-                            Password
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            type="password"
-                            name='password'
-                            value={password}
-                            onChange={e => onChange(e)}
-                          />
-                        </FormGroup>
-                      </Col>
-
-                      {
-                        currentUser.role === 'Super Admin' &&
-                        <Col sm="4">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-last-name"
-                            >
-                              Change Role
-                            </label>
-                            <Input
-                              type="select"
-                              name="role"
-                              value={role}
-                              onChange={e => onChange(e)}
-                            >
-                              <option>Super Admin</option>
-                              <option>Admin</option>
-                              <option>Associate</option>
-                            </Input>
-                          </FormGroup>
-                        </Col>
-                      }
-
-                    </Row>
-                  </div>
-
-                  <hr className="my-4" />
-
-                  <h6 className="heading-small text-muted mb-4">Notes</h6>
-                  <div className="pl-lg-4">
-                    <FormGroup>
-                      <label>Notes</label>
-                      <Input
-                        className="form-control-alternative"
-                        rows="4"
-                        type="textarea"
-                        name='notes'
-                        value={notes}
-                        onChange={e => onChange(e)}
-                      />
-                    </FormGroup>
-                  </div>
-
-                  <Button className="submit-btn" type="submit">Submit</Button>
-                </Form>
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
+                <Button className="submit-btn" type="submit">Submit</Button>
+              </Form>
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
     </>
-
   );
 };
 
-Profile.propTypes = {
-  auth: PropTypes.object,
-  updateUser: PropTypes.func.isRequired,
-  loadUser: PropTypes.func.isRequired,
-  removeAlert: PropTypes.func.isRequired,
-};
-
-export default connect(null, { loadUser, updateUser, removeAlert })(Profile);
+export default Profile;

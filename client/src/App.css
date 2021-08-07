@@ -188,6 +188,10 @@ button {
   display: block;
 }
 
+.mb-100 {
+  margin-bottom: 100px;
+}
+
   /* ============================ */
 
   form.user .custom-checkbox.small label {

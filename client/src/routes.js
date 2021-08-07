@@ -29,7 +29,7 @@ const routes = [
     icon: "ni ni-tv-2 text-primary",
     sub: [{
       path: "/products",
-      name: "Ver Products",
+      name: "Ver Produtos",
       layout: "/admin",
     },
     {

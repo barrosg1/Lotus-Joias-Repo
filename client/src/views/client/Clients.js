@@ -1,9 +1,6 @@
 import MUIDataTable from "mui-datatables";
 import React, { useEffect } from 'react';
-import { connect, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-import PropTypes from 'prop-types'
-
+import { useSelector, useDispatch } from "react-redux";
 
 // reactstrap components
 import {
@@ -16,32 +13,30 @@ import {
 import GeneralHeader from '../../components/Headers/GeneralHeader';
 import { getClients } from '../../redux/actions/clientActions';
 
-const Clients = ({ getClients }) => {
+const Clients = ({ history }) => {
+
+    const dispatch = useDispatch();
 
     const { clients, loading } = useSelector(state => state.clientReducer);
 
-    let history = useHistory();
-
     useEffect(() => {
 
-        getClients();
+        dispatch(getClients());
 
-    }, [getClients, loading]);
+    }, [dispatch, loading]);
 
 
-    const goToClientPage = (id) => {
+    const goToClientPage = (id) => history.push(`/admin/client-profile/${id}`);
 
-        history.push(`/admin/client-profile/${id}`);
-    }
 
     const columns = [
 
         {
             name: 'View Client',
             options: {
-                customBodyRender: (value, tableMeta, updateValue) => {
+                customBodyRender: (clientId) => {
                     return (
-                        <Button onClick={() => goToClientPage(value)} color="secondary">View</Button>
+                        <Button onClick={() => goToClientPage(clientId)} color="secondary">View</Button>
                     );
                 },
                 filter: false
@@ -105,33 +100,18 @@ const Clients = ({ getClients }) => {
         rowsPerPageOptions: [5, 10, 25]
     };
 
-
     return (
-        <>
-            <GeneralHeader />
-
-            <Container>
-                <MUIDataTable
-                    title={"Clients"}
-                    data={constructedData()}
-                    columns={columns}
-                    options={options}
-                />
-            </Container>
-
-        </>
+        <MUIDataTable
+            title={"Clients"}
+            data={constructedData()}
+            columns={columns}
+            options={options}
+        />
     )
 
 }
 
-Clients.propTypes = {
-    getClients: PropTypes.func.isRequired,
-    getClient: PropTypes.func.isRequired,
-    clients: PropTypes.object.isRequired,
-    loading: PropTypes.object.isRequired,
-}
-
-export default connect(null, { getClients })(Clients);
+export default Clients;
 
 
 

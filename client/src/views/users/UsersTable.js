@@ -1,25 +1,16 @@
 import MUIDataTable from "mui-datatables";
 import React, { useEffect } from 'react';
-import { connect, useSelector } from "react-redux";
-import PropTypes from 'prop-types';
-
+import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBan } from '@fortawesome/free-solid-svg-icons';
-
 import { getAllUsers, deleteUser } from '../../redux/actions/userActions';
 
-// reactstrap components
-import {
-    Button,
-
-} from "reactstrap";
+import { Button } from "reactstrap";
 
 
-const UsersTable = ({
-    getAllUsers,
-    deleteUser
+const UsersTable = () => {
 
-}) => {
+    const dispatch = useDispatch();
 
     // from state
     const currentUser = useSelector(state => state.authReducer.currentUser);
@@ -28,29 +19,38 @@ const UsersTable = ({
 
     useEffect(() => {
 
-        getAllUsers();
+        dispatch(getAllUsers());
 
-    }, [getAllUsers, loading]);
+    }, [dispatch, loading]);
 
     const columns = [
-
         {
             name: 'Delete',
             options: {
                 customBodyRender: (userId) => {
-
                     return (
-
                         <>
                             {
                                 currentUser._id !== userId ?
 
-                                    (<Button onClick={() => deleteUser(userId)} size="sm" className="btn-delete">Delete</Button>)
+                                    (
+                                        <Button
+                                            onClick={() => dispatch(deleteUser(userId))}
+                                            size="sm"
+                                            className="btn-delete"
+                                        >Delete
+                                        </Button>
+                                    )
 
                                     :
 
-                                    <FontAwesomeIcon style={{ marginLeft: 22 }} className="mr-2 text-muted" icon={faBan} />
-
+                                    (
+                                        <FontAwesomeIcon
+                                            style={{ marginLeft: 22 }}
+                                            className="mr-2 text-muted"
+                                            icon={faBan}
+                                        />
+                                    )
                             }
 
                         </>
@@ -92,12 +92,10 @@ const UsersTable = ({
         }
     ];
 
-    // display user data
     const displayUsers = () => {
         const clientList = [];
 
         users && users.forEach(user => {
-
             clientList.push({
                 "Delete": user._id,
                 "Role": user.role,
@@ -112,7 +110,6 @@ const UsersTable = ({
         return clientList;
     }
 
-
     const options = {
         responsive: 'responsive',
         selectableRows: false,
@@ -121,7 +118,6 @@ const UsersTable = ({
         viewColumns: false,
         rowsPerPageOptions: [10]
     };
-
 
     return (
         <MUIDataTable
@@ -133,13 +129,7 @@ const UsersTable = ({
     )
 }
 
-UsersTable.propTypes = {
-    getAllUsers: PropTypes.func.isRequired,
-    deleteUser: PropTypes.func.isRequired,
-
-}
-
-export default connect(null, { getAllUsers, deleteUser })(UsersTable);
+export default UsersTable;
 
 
 

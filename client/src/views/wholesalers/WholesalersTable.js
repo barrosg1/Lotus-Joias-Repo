@@ -17,26 +17,25 @@ const WholesalersTable = () => {
     const loading = useSelector(state => state.wholesalerReducer.loading);
 
     useEffect(() => {
-
         dispatch(getWholesalers());
-
 
     }, [loading, dispatch]);
 
     // functions
     const goToWholesalerPage = (wholesalerId) => history.push(`/admin/edit-wholesaler/${wholesalerId}`);
 
-
     const columns = [
-
         {
             name: 'Ver Detalhes',
             options: {
                 customBodyRender: (id) => {
-
                     return (
-
-                        <Button onClick={() => goToWholesalerPage(id)} size="sm" color="secondary">Ver Detalhes</Button>
+                        <Button
+                            onClick={() => goToWholesalerPage(id)}
+                            size="sm"
+                            color="secondary"
+                        >Ver Detalhes
+                        </Button>
                     );
                 },
                 filter: false
@@ -92,7 +91,6 @@ const WholesalersTable = () => {
         return wholesalerList;
     }
 
-
     const options = {
         responsive: 'responsive',
         selectableRows: false,
@@ -102,10 +100,8 @@ const WholesalersTable = () => {
         rowsPerPageOptions: [10]
     };
 
-
     return (
         <MUIDataTable
-
             data={displayWholesalers()}
             columns={columns}
             options={options}

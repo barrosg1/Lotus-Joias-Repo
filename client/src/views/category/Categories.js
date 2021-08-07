@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { connect, useSelector } from "react-redux";
-import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from "react-redux";
 
 import GeneralHeader from '../../components/Headers/GeneralHeader';
 
@@ -25,10 +24,9 @@ import Alert from '../../layouts/Alert';
 import RoleCategory from "./RoleCategory";
 import ProductCategory from "./ProductCategory";
 
-const Categories = ({
-    addRoleCategory,
-    addProductCategory
-}) => {
+const Categories = () => {
+
+    const dispatch = useDispatch();
 
     // from state
     const currentUser = useSelector(state => state.authReducer.currentUser);
@@ -43,105 +41,97 @@ const Categories = ({
     const addCategory = () => {
 
         if (table === 'Roles') {
-            addRoleCategory({ name });
+            dispatch(addRoleCategory({ name }));
 
         } else {
-            addProductCategory({ name })
+            dispatch(addProductCategory({ name }))
         }
     }
 
     return (
         <>
-            <GeneralHeader />
-            <Container>
-                <Col xl="12">
-                    <Card className="bg-secondary shadow">
-                        <Alert />
-                        <CardHeader className="bg-white border-0">
-                            <Row className="align-items-center">
-                                <Col xs="8">
-                                    <h3 className="mb-0">New Category</h3>
-                                </Col>
-                            </Row>
-                        </CardHeader>
-                        <CardBody>
-                            <Row className="align-items-center">
-                                <Col sm="4">
+
+            <Col xl="12">
+                <Card className="bg-secondary shadow">
+                    <Alert />
+                    <CardHeader className="bg-white border-0">
+                        <Row className="align-items-center">
+                            <Col xs="8">
+                                <h3 className="mb-0">New Category</h3>
+                            </Col>
+                        </Row>
+                    </CardHeader>
+                    <CardBody>
+                        <Row className="align-items-center">
+                            <Col sm="4">
+                                <FormGroup>
+                                    <label
+                                        className="form-control-label"
+                                        htmlFor="input-last-name"
+                                    >
+                                        Category
+                                    </label>
+                                    <Input
+                                        type="select"
+                                        name="table"
+                                        value={table}
+                                        onChange={e => onChange(e)}
+                                    >
+
+                                        <option>Products</option>
+                                        {
+                                            currentUser.role === 'Super Admin' && <option>Roles</option>
+                                        }
+
+                                    </Input>
+                                </FormGroup>
+                            </Col>
+                            <Col sm="6">
+                                <div className="pl-lg-4">
+                                    <label
+                                        className="form-control-label"
+                                        htmlFor="input-name"
+                                    >
+                                        New Category Name
+                                    </label>
                                     <FormGroup>
-                                        <label
-                                            className="form-control-label"
-                                            htmlFor="input-last-name"
-                                        >
-                                            Category
-                                        </label>
+
                                         <Input
-                                            type="select"
-                                            name="table"
-                                            value={table}
+                                            className="form-control-alternative"
+                                            placeholder="Add a new category"
+                                            type="text"
+                                            name='name'
+                                            value={name}
                                             onChange={e => onChange(e)}
-                                        >
 
-                                            <option>Products</option>
-                                            {
-                                                currentUser.role === 'Super Admin' && <option>Roles</option>
-                                            }
-
-                                        </Input>
+                                        />
                                     </FormGroup>
-                                </Col>
-                                <Col sm="6">
-                                    <div className="pl-lg-4">
-                                        <label
-                                            className="form-control-label"
-                                            htmlFor="input-name"
-                                        >
-                                            New Category Name
-                                        </label>
-                                        <FormGroup>
+                                </div>
+                            </Col>
+                            <Col sm="2">
+                                <Button color="primary" onClick={() => addCategory()}>Add</Button>
+                            </Col>
+                        </Row>
 
-                                            <Input
-                                                className="form-control-alternative"
-                                                placeholder="Add a new category"
-                                                type="text"
-                                                name='name'
-                                                value={name}
-                                                onChange={e => onChange(e)}
+                        <hr />
 
-                                            />
-                                        </FormGroup>
-                                    </div>
-                                </Col>
-                                <Col sm="2">
-                                    <Button color="primary" onClick={() => addCategory()}>Add</Button>
-                                </Col>
-                            </Row>
-
-                            <hr />
-
-                            <Row>
-                                <Col sm={4} className="mb-5">
-                                    <RoleCategory />
-                                </Col>
-                                <Col sm={8}>
-                                    <ProductCategory />
-                                </Col>
-                            </Row>
-                        </CardBody>
-                    </Card>
-                </Col>
-            </Container>
-
+                        <Row>
+                            <Col sm={4} className="mb-5">
+                                <RoleCategory />
+                            </Col>
+                            <Col sm={8}>
+                                <ProductCategory />
+                            </Col>
+                        </Row>
+                    </CardBody>
+                </Card>
+            </Col>
         </>
     )
 
 }
 
-Categories.propTypes = {
-    addProductCategory: PropTypes.func.isRequired,
-
-}
-
-export default connect(null, { addRoleCategory, addProductCategory })(Categories);
+export default Categories;
 
 
 

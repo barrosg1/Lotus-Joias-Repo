@@ -1,7 +1,6 @@
 import MUIDataTable from "mui-datatables";
-import React, { useEffect, useState } from 'react';
-import { connect, useSelector } from "react-redux";
-import PropTypes from 'prop-types';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from "react-redux";
 
 // reactstrap components
 import { Button } from "reactstrap";
@@ -9,28 +8,24 @@ import { Button } from "reactstrap";
 import { getProductCategories, deleteProductCategory } from '../../redux/actions/categoryActions';
 
 
-const ProductCategory = ({ getProductCategories, deleteProductCategory }) => {
+const ProductCategory = () => {
+
+    const dispatch = useDispatch();
 
     const productCategories = useSelector(state => state.categoryReducer.productCategories);
     const productLoading = useSelector(state => state.categoryReducer.productLoading);
 
     useEffect(() => {
 
-        getProductCategories();
+        dispatch(getProductCategories());
 
-    }, [getProductCategories, productLoading]);
-
-    // modal
-    const [modal, setModal] = useState(false);
-    const toggle = () => setModal(!modal);
-
+    }, [dispatch, productLoading]);
 
     // display all product categories
     const displayProductCategories = () => {
         const clientList = [];
 
         productCategories && productCategories.forEach(productCategory => {
-
             clientList.push({
                 "Delete": productCategory._id,
                 "Category": productCategory.name,
@@ -41,12 +36,6 @@ const ProductCategory = ({ getProductCategories, deleteProductCategory }) => {
         return clientList;
     }
 
-    // delete a product category
-    const prodCategoryDelete = (id) => {
-        deleteProductCategory(id);
-
-    }
-
     const productColumns = [
 
         {
@@ -54,8 +43,13 @@ const ProductCategory = ({ getProductCategories, deleteProductCategory }) => {
             options: {
                 customBodyRender: (productId) => {
                     return (
-
-                        <Button onClick={() => prodCategoryDelete(productId)} size="sm" className="btn-delete">Delete</Button>
+                        <Button
+                            onClick={() => dispatch(deleteProductCategory(productId))}
+                            size="sm"
+                            className="btn-delete"
+                        >
+                            Delete
+                        </Button>
                     );
                 },
                 filter: false
@@ -80,7 +74,6 @@ const ProductCategory = ({ getProductCategories, deleteProductCategory }) => {
     };
 
     return (
-
         <MUIDataTable
             title={"Product Categories"}
             data={displayProductCategories()}
@@ -91,17 +84,7 @@ const ProductCategory = ({ getProductCategories, deleteProductCategory }) => {
 
 }
 
-ProductCategory.propTypes = {
-    getProductCategories: PropTypes.func.isRequired,
-    deleteProductCategory: PropTypes.func.isRequired,
-    productCategories: PropTypes.object.isRequired,
-    loading: PropTypes.object.isRequired,
-}
-
-export default connect(null, {
-    getProductCategories,
-    deleteProductCategory
-})(ProductCategory);
+export default ProductCategory;
 
 
 

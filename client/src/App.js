@@ -10,7 +10,7 @@ import store from "redux/store";
 // === Layout Components ===
 import AuthLayout from "layouts/Auth.js";
 import PrivateRoute from "layouts/PrivateRoute";
-import AdminView from './views/AdminView';
+import Dashboard from './views/dashboard/Dashboard';
 
 // === Users Component ===
 import Users from './views/users/Users';
@@ -41,9 +41,7 @@ import { loadUser } from './redux/actions/authActions';
 function App() {
 
     useEffect(() => {
-
         store.dispatch(loadUser());
-
 
     }, []);
 
@@ -67,7 +65,7 @@ function App() {
                     <PrivateRoute path={`${ADMIN}/wholesaler`} component={Wholesalers} />
                     <PrivateRoute path={`${ADMIN}/edit-wholesaler/:wholesaler_id`} component={EditWholesaler} />
                     <PrivateRoute path={`${ADMIN}/client-profile/:client_id/transactions`} component={ClientProfile} />
-                    <PrivateRoute path={ADMIN} component={AdminView} />
+                    <PrivateRoute path={ADMIN} component={Dashboard} isDashboard={true} />
 
                     <Redirect from="/" to={ADMIN} />
                 </Switch>

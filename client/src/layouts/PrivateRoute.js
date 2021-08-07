@@ -5,11 +5,12 @@ import { useSelector } from 'react-redux';
 
 import Sidebar from '../components/Sidebar/Sidebar';
 import AdminNavbar from '../components/Navbars/AdminNavbar';
-import AdminFooter from '../components/Footers/AdminFooter';
-
+import GeneralHeader from '../components/Headers/GeneralHeader';
+import DashboardHeader from 'components/Headers/DashboardHeader.js';
 
 const PrivateRoute = ({
     component: Component,
+    isDashboard,
     ...rest
 }) => {
 
@@ -30,10 +31,27 @@ const PrivateRoute = ({
                                 <Sidebar />
                                 <div className="main-content" >
                                     <AdminNavbar />
-                                    <Component {...props} />
-                                    <Container fluid>
-                                        <AdminFooter />
-                                    </Container>
+                                    {
+                                        isDashboard ? (
+                                            <>
+                                                <DashboardHeader />
+                                                <Container className="mt--7 p-5" fluid>
+                                                    <Component {...props} />
+                                                </Container>
+                                            </>
+                                        )
+
+                                            :
+
+                                            (
+                                                <>
+                                                    <GeneralHeader />
+                                                    <Container className="mb-100">
+                                                        <Component {...props} />
+                                                    </Container>
+                                                </>
+                                            )
+                                    }
                                 </div>
                             </Fragment>
                     }

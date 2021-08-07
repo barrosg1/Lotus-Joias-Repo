@@ -1,31 +1,29 @@
 import {
-
     Button,
-    Container, Media,
-
+    Container,
+    Media,
 } from "reactstrap";
 
 import MUIDataTable from "mui-datatables";
-import React, { useEffect, useState } from 'react';
-import { connect } from "react-redux";
-import PropTypes from 'prop-types'
+import React, { useEffect } from 'react';
+import { getProducts } from '../../redux/actions/productActions';
+import { useSelector, useDispatch } from "react-redux";
 
 import GeneralHeader from '../../components/Headers/GeneralHeader';
 
-import { getProducts } from '../../redux/actions/productActions';
-import { useSelector } from "react-redux";
 
+const Products = ({ history }) => {
 
-const Products = ({ getProducts, history }) => {
+    const dispatch = useDispatch();
 
     const products = useSelector(state => state.productReducer.products);
     const loading = useSelector(state => state.productReducer.loading);
 
     useEffect(() => {
 
-        getProducts();
+        dispatch(getProducts());
 
-    }, [getProducts, loading]);
+    }, [dispatch, loading]);
 
 
     const gotToProductPage = (id) => { history.push(`/admin/edit-product/${id}`); }
@@ -34,10 +32,15 @@ const Products = ({ getProducts, history }) => {
         {
             name: 'View Product',
             options: {
-                customBodyRender: (value) => {
+                customBodyRender: (productId) => {
 
                     return (
-                        <Button onClick={() => gotToProductPage(value)} color="secondary" className>View</Button>
+                        <Button
+                            onClick={() => gotToProductPage(productId)}
+                            color="secondary"
+                            className
+                        >View
+                        </Button>
                     );
                 },
                 filter: false
@@ -48,11 +51,15 @@ const Products = ({ getProducts, history }) => {
             name: 'Product Image',
             options: {
                 customBodyRender: (value) => {
-
                     return (
                         <Media
                             className="product-image-table"
-                            src={!value ? require('../../assets/img/random/blank-image.png').default : `http://localhost:5000${value}`}
+                            src={
+                                !value ?
+                                    require('../../assets/img/random/blank-image.png').default
+                                    :
+                                    `http://localhost:5000${value}`
+                            }
                             alt="..."
                         />
                     );
@@ -101,7 +108,6 @@ const Products = ({ getProducts, history }) => {
         const productList = [];
 
         !loading && products && products.forEach(product => {
-
             productList.unshift({
                 "Category": product.category,
                 "View Product": product._id,
@@ -128,28 +134,17 @@ const Products = ({ getProducts, history }) => {
     };
 
     return (
-        <>
-            <GeneralHeader />
-            <Container>
-                <MUIDataTable
-                    title={"Products"}
-                    data={constructedData()}
-                    columns={columns}
-                    options={options}
-                />
-
-            </Container>
-        </>
+        <MUIDataTable
+            title={"Products"}
+            data={constructedData()}
+            columns={columns}
+            options={options}
+        />
     )
 
 }
 
-Products.propTypes = {
-    getProducts: PropTypes.func.isRequired,
-    getProductById: PropTypes.func.isRequired,
-}
-
-export default connect(null, { getProducts })(Products);
+export default Products;
 
 
 

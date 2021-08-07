@@ -12,19 +12,19 @@ import {
   InputGroup,
   Col,
   Media,
-  Label
+
 } from "reactstrap";
 
 import React, { useState } from 'react';
-import { connect, useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Redirect } from 'react-router-dom';
-import PropTypes from 'prop-types'
 import { login } from '../../redux/actions/authActions';
 
 import Alert from '../../layouts/Alert';
 
+const Login = () => {
 
-const Login = ({ login }) => {
+  const dispatch = useDispatch();
 
   const isAuthenticated = useSelector(state => state.authReducer.isAuthenticated);
 
@@ -42,7 +42,7 @@ const Login = ({ login }) => {
   const onSubmit = e => {
     e.preventDefault();
 
-    login({ email, password });
+    dispatch(login({ email, password }));
 
   }
 
@@ -69,73 +69,65 @@ const Login = ({ login }) => {
   }
 
   return (
-    <>
+    <Col lg="5" md="7">
+      <Card className="bg-secondary shadow border-0">
+        <CardHeader className="bg-transparent pb-5">
+          <Alert />
+          <Media object style={imgStyle} src={
+            require("../../assets/img/brand/Logo-02.png")
+              .default
+          } />
 
-      <Col lg="5" md="7">
-        <Card className="bg-secondary shadow border-0">
-          <CardHeader className="bg-transparent pb-5">
-            <Alert />
-            <Media object style={imgStyle} src={
-              require("../../assets/img/brand/Logo-02.png")
-                .default
-            } />
-
-          </CardHeader>
-          <CardBody className="px-lg-5 py-lg-5">
-            <Form onSubmit={(e) => onSubmit(e)}>
-              <FormGroup className="mb-3">
-                <InputGroup className="input-group-alternative">
-                  <InputGroupAddon addonType="prepend">
-                    <InputGroupText>
-                      <i className="ni ni-email-83" />
-                    </InputGroupText>
-                  </InputGroupAddon>
-                  <Input
-                    placeholder="Email"
-                    type="email"
-                    autoComplete="new-email"
-                    name='email'
-                    value={email}
-                    onChange={e => onChange(e)}
-                  />
-                </InputGroup>
-              </FormGroup>
-              <FormGroup>
-                <InputGroup className="input-group-alternative">
-                  <InputGroupAddon addonType="prepend">
-                    <InputGroupText>
-                      <i className="ni ni-lock-circle-open" />
-                    </InputGroupText>
-                  </InputGroupAddon>
-                  <Input
-                    placeholder="Password"
-                    type={showPassword}
-                    autoComplete="new-password"
-                    name='password'
-                    value={password}
-                    onChange={e => onChange(e)}
-                  />
-                </InputGroup>
-              </FormGroup>
-              <center><Input type="checkbox" onClick={() => togglePassword()} />{' '}
-                Show Password
-              </center>
-              <div className="text-center">
-                <Button className="submit-btn" color="primary" type="submit">
-                  Sign in
-                </Button>
-              </div>
-            </Form>
-          </CardBody>
-        </Card>
-      </Col>
-    </>
+        </CardHeader>
+        <CardBody className="px-lg-5 py-lg-5">
+          <Form onSubmit={(e) => onSubmit(e)}>
+            <FormGroup className="mb-3">
+              <InputGroup className="input-group-alternative">
+                <InputGroupAddon addonType="prepend">
+                  <InputGroupText>
+                    <i className="ni ni-email-83" />
+                  </InputGroupText>
+                </InputGroupAddon>
+                <Input
+                  placeholder="Email"
+                  type="email"
+                  autoComplete="new-email"
+                  name='email'
+                  value={email}
+                  onChange={e => onChange(e)}
+                />
+              </InputGroup>
+            </FormGroup>
+            <FormGroup>
+              <InputGroup className="input-group-alternative">
+                <InputGroupAddon addonType="prepend">
+                  <InputGroupText>
+                    <i className="ni ni-lock-circle-open" />
+                  </InputGroupText>
+                </InputGroupAddon>
+                <Input
+                  placeholder="Password"
+                  type={showPassword}
+                  autoComplete="new-password"
+                  name='password'
+                  value={password}
+                  onChange={e => onChange(e)}
+                />
+              </InputGroup>
+            </FormGroup>
+            <center><Input type="checkbox" onClick={() => togglePassword()} />{' '}
+              Show Password
+            </center>
+            <div className="text-center">
+              <Button className="submit-btn" color="primary" type="submit">
+                Sign in
+              </Button>
+            </div>
+          </Form>
+        </CardBody>
+      </Card>
+    </Col>
   );
 };
 
-Login.propTypes = {
-  login: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool
-}
-
-export default connect(null, { login })(Login);
+export default Login;

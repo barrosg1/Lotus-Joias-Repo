@@ -1,23 +1,19 @@
 import MUIDataTable from "mui-datatables";
 import React, { useEffect } from 'react';
-import { connect, useSelector } from "react-redux";
-import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from "react-redux";
 
 // reactstrap components
 import { Button } from "reactstrap";
 
 import {
     getRoleCategories,
-    deleteRoleCategory,
-    addRoleCategory,
+    deleteRoleCategory
 } from '../../redux/actions/categoryActions';
 
 
-const RoleCategory = ({
-    getRoleCategories,
-    deleteRoleCategory,
+const RoleCategory = () => {
 
-}) => {
+    const dispatch = useDispatch();
 
     // from state
     const currentUser = useSelector(state => state.authReducer.currentUser);
@@ -26,9 +22,9 @@ const RoleCategory = ({
 
     useEffect(() => {
 
-        getRoleCategories();
+        dispatch(getRoleCategories());
 
-    }, [getRoleCategories, loading]);
+    }, [dispatch, loading]);
 
 
     // display category data
@@ -36,7 +32,6 @@ const RoleCategory = ({
         const clientList = [];
 
         categories && categories.forEach(category => {
-
             clientList.push({
                 "Delete": category._id,
                 "Category": category.name,
@@ -47,19 +42,19 @@ const RoleCategory = ({
         return clientList;
     }
 
-    // delete a category
-    const roleCategoryDelete = (id) => deleteRoleCategory(id);
-
-
     const roleColumns = [
-
         {
             name: 'Delete',
             options: {
                 customBodyRender: (categoryId) => {
-
                     return (
-                        <Button onClick={() => roleCategoryDelete(categoryId)} size="sm" className="btn-delete">Delete</Button>
+                        <Button
+                            onClick={() => dispatch(deleteRoleCategory(categoryId))}
+                            size="sm"
+                            className="btn-delete"
+                        >
+                            Delete
+                        </Button>
 
                     );
                 },
@@ -83,10 +78,8 @@ const RoleCategory = ({
         rowsPerPageOptions: [10]
     };
 
-
     return (
         <>
-
             {
                 !loading && currentUser.role === 'Super Admin' && (
                     <MUIDataTable
@@ -103,19 +96,7 @@ const RoleCategory = ({
 
 }
 
-RoleCategory.propTypes = {
-    getRoleCategories: PropTypes.func.isRequired,
-    deleteRoleCategory: PropTypes.func.isRequired,
-    categories: PropTypes.object.isRequired,
-    loading: PropTypes.object.isRequired,
-}
-
-export default connect(null, {
-    getRoleCategories,
-    deleteRoleCategory,
-    addRoleCategory,
-
-})(RoleCategory);
+export default RoleCategory;
 
 
 

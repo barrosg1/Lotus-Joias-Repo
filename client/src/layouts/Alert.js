@@ -1,22 +1,17 @@
-import React, { Fragment, useEffect } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import { Button, Col } from 'reactstrap';
+import React, { Fragment } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { Button } from 'reactstrap';
 import { removeAlert } from 'redux/actions/alertActions';
 import { isEmpty } from '../utils/isEmpty';
 
+const Alert = ({ history }) => {
 
-
-const Alert = ({ alerts, removeAlert }) => {
-
-    const history = useHistory();
+    const dispatch = useDispatch();
+    const alerts = useSelector(state => state.alertReducer)
 
     const submit = (productPath) => {
-
-        removeAlert();
+        dispatch(removeAlert());
         history.push(productPath);
-
     }
 
     let isAlert = '';
@@ -24,8 +19,7 @@ const Alert = ({ alerts, removeAlert }) => {
     if (!isEmpty(alerts)) {
 
         isAlert = (
-            <Fragment>
-
+            <>
                 <div className={`alert-style alert alert-${alerts.alertType}`}>
 
                     {
@@ -47,28 +41,13 @@ const Alert = ({ alerts, removeAlert }) => {
                     }
 
                 </div>
-
-
-            </Fragment>
+            </>
         )
     }
 
     return (
-
-        <>
-            {isAlert}
-        </>
+        <Fragment>{isAlert}</Fragment>
     );
 }
 
-
-Alert.propTypes = {
-    alerts: PropTypes.array.isRequired,
-    removeAlert: PropTypes.func.isRequired,
-}
-
-const mapStateToProps = state => ({
-    alerts: state.alertReducer
-});
-
-export default connect(mapStateToProps, { removeAlert })(Alert);
+export default Alert;
