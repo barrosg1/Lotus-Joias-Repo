@@ -53,9 +53,7 @@ const Login = () => {
 
   const togglePassword = () => {
     if (showPassword === 'password') {
-
       setShowPassword('text');
-
     } else {
       setShowPassword('password');
     }
