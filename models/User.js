@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-
 const UserSchema = new mongoose.Schema({
     role: {
         type: String,
@@ -42,12 +41,8 @@ const UserSchema = new mongoose.Schema({
 });
 
 UserSchema.pre('save', async function (next) {
-
     try {
-
-        if (!this.isModified('password')) {
-            next();
-        }
+        if (!this.isModified('password')) next();
 
         this.tempPassword = this.password;
 
@@ -56,9 +51,7 @@ UserSchema.pre('save', async function (next) {
         this.password = await bcrypt.hash(this.password, salt);
 
         next();
-
     } catch (error) {
-
         next(error);
     }
 });
